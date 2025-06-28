@@ -1,0 +1,20 @@
+[project]
+name = "rag-zoo"
+version = "0.1.0"
+description = "A module to easily implement different types of RAG"
+authors = [
+    {name = "Your Name",email = "you@example.com"}
+]
+license = {text = "MIT"}
+readme = "README.md"
+requires-python = ">=3.12,<4.0"
+dependencies = [
+    "llama-index (>=0.12.44,<0.13.0)",
+    "sentence-transformers (>=4.1.0,<5.0.0)",
+    "faiss-cpu (>=1.11.0,<2.0.0)"
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
