@@ -3,5 +3,7 @@ from .default import DefaultQueryTransformer
 
 __all__ = [
     "BaseQueryTransformer",
-    "DefaultQueryTransformer"
+    "DefaultQueryTransformer",
+    "HyDE",
+    "QueryDecomposer",
 ]

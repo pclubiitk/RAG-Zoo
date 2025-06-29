@@ -19,3 +19,15 @@ class BaseQueryTransformer(ABC):
             List[str]: One or more reformulated or hallucinated queries.
         """
         pass
+
+    def __call__(self, query: str) -> List[str]:
+        """
+        Makes the class instance callable like a function.
+
+        Example:
+            queries = query_transform("What is YOLO?")
+
+        Returns:
+            Same as self.transform(query)
+        """
+        return self.transform(query)
