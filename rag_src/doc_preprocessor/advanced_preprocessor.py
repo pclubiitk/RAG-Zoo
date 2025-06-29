@@ -2,7 +2,6 @@ from typing import List
 from bs4 import BeautifulSoup
 from unidecode import unidecode
 import re
-
 from nltk.corpus import stopwords
 from .base import BasePreprocessor
 

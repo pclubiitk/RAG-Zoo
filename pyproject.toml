@@ -16,11 +16,12 @@ dependencies = [
     "llama-index-llms-groq (>=0.3.2,<0.4.0)",
     "llama-index-llms-google-genai (>=0.2.2,<0.3.0)",
     "llama-index-llms-huggingface (>=0.5.0,<0.6.0)",
-    "fitz (>=0.0.1.dev2,<0.0.2)",
-    "docx (>=0.2.4,<0.3.0)",
     "ebooklib (>=0.19,<0.20)",
     "bs4 (>=0.0.2,<0.0.3)",
-    "unidecode (>=1.4.0,<2.0.0)"
+    "unidecode (>=1.4.0,<2.0.0)",
+    "pathlib (>=1.0.1,<2.0.0)",
+    "pymupdf (>=1.26.1,<2.0.0)",
+    "python-docx (>=1.2.0,<2.0.0)"
 ]
 
 

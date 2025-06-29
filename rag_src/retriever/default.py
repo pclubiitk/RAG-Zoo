@@ -1,4 +1,4 @@
-from base import BaseRetriever
+from .base import BaseRetriever
 from typing import List, Dict, Any
 import faiss
 import numpy as np

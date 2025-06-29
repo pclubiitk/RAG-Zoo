@@ -3,7 +3,7 @@ from llama_index.llms.google_genai import GoogleGenAI
 from .base import BaseLLM
 
 class GeminiLLM(BaseLLM):
-    def __init__(self, model: str = "gemini-1.5-flash", api_key: str = None):
+    def __init__(self, api_key: str = None, model: str = "gemini-1.5-flash"):
         self.llm = GoogleGenAI(model=model, api_key=api_key)
 
     def generate(self, query: str, contexts: List[str]) -> Union[str, dict]:

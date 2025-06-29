@@ -7,12 +7,14 @@ from rag_src.doc_context_enricher import BaseContextEnricher, DefaultContextEnri
 from rag_src.indexer import BaseIndexer, DefaultIndexer
 from rag_src.doc_loader import BaseDocLoader, DefaultDocLoader
 from rag_src.doc_preprocessor import BasePreprocessor, DefaultPreprocessor
+from rag_src.chunker import BaseChunker, DefaultChunker
+import os
 
 class RunRAG:
-    """
-    Full RAG pipeline: indexing + answering
-    """
 
+    """
+        Full RAG pipeline: indexing + answering
+    """
     def __init__(
         self,
         llm: Optional[BaseLLM],
@@ -21,36 +23,67 @@ class RunRAG:
         retriever: Optional[BaseRetriever],
         query_transform: Optional[BaseQueryTransformer],
         doc_enricher: Optional[BaseContextEnricher],
-        doc_loader: Optional[BaseDocLoader],         
-        preprocessor: Optional[BasePreprocessor],    
+        doc_loader: Optional[BaseDocLoader],
+        preprocessor: Optional[BasePreprocessor],
         docdir: str,
+        chunker: Optional[BaseChunker] = None,
     ):
+        self.docdir = docdir
         self.llm = llm or DefaultLLM()
         self.embeddor = embeddor or DefaultEmbedder()
         self.indexer = indexer or DefaultIndexer()
-        self.retriever = retriever or DefaultRetriever()
         self.query_transform = query_transform or DefaultQueryTransformer()
         self.doc_enricher = doc_enricher or DefaultContextEnricher()
         self.doc_loader = doc_loader or DefaultDocLoader(self.docdir)
         self.preprocessor = preprocessor or DefaultPreprocessor()
-        self.docdir = docdir
+        self.chunker = chunker or DefaultChunker() 
+
+        # Ensure index is built before initializing retriever
+        index_path = getattr(self.indexer, "persist_path", "default_index")
+        index_file = os.path.join(index_path, "index.faiss")
+
+        if not os.path.exists(index_file):
+            print(f"[INFO] FAISS index not found at {index_file}. Running ingestion pipeline.")
+            self.load_and_ingest_documents()
+        else:
+            print(f"[INFO] Found existing index at {index_file}. Skipping ingestion.")
+
+        self.retriever = retriever or DefaultRetriever(index_path=index_path)
+
+        
 
     def run(self, query: str) -> str:
         print("=== RUNNING RAG PIPELINE ===")
 
-        queries = self.query_transform(query) if self.query_transform else [query]
+        # Step 1: Transform query
+        queries = self.query_transform.transform(query) if self.query_transform else [query]
         print(f"Step 1: Transformed queries: {queries}")
 
-        docs = self.retriever.retrieve(queries)
-        print(f"Step 2: Retrieved {len(docs)} documents")
+        # Step 2: Retrieve documents for all queries
+        all_docs = []
+        seen_texts = set()
 
-        enriched_docs = self.doc_enricher.enrich(docs)
+        for q in queries:
+            results = self.retriever.retrieve(q)
+            for doc in results:
+                if doc["text"] not in seen_texts:
+                    all_docs.append(doc)
+                    seen_texts.add(doc["text"])
+
+        print(f"Step 2: Retrieved {len(all_docs)} unique documents")
+
+        # Step 3: Enrich
+        enriched_docs = self.doc_enricher.enrich(all_docs)
         print(f"Step 3: Enriched documents count: {len(enriched_docs)}")
 
-        final_answer = self.llm.generate(query, enriched_docs)
+        # Step 4: LLM Generation
+        context_texts = [doc["text"] for doc in enriched_docs]
+        final_answer = self.llm.generate(query, context_texts)
+
         print(f"Step 4: Final Answer: {final_answer}")
 
         return final_answer
+
 
     def ingest_documents(self, documents: List[str], metadata: Optional[List[dict]] = None) -> None:
         """
@@ -60,18 +93,15 @@ class RunRAG:
             raise ValueError("Embedder or indexer not set.")
 
         print("=== INDEXING DOCUMENTS ===")
-        embeddings = self.embeddor.embed_documents(documents)
+        embeddings = self.embeddor.embed(documents)
         self.indexer.index(embeddings, documents, metadata)
         self.indexer.persist()
         print("Index persisted.")
 
     def load_and_ingest_documents(self) -> None:
-        """
-        Loads documents using the loader, optionally preprocesses them, then indexes.
-        """
         if not self.doc_loader:
             raise ValueError("No document loader provided.")
-        
+
         print("=== LOADING DOCUMENTS ===")
         documents = self.doc_loader.load()
         print(f"Loaded {len(documents)} raw documents.")
@@ -80,33 +110,50 @@ class RunRAG:
             documents = self.preprocessor.preprocess(documents)
             print(f"Preprocessed down to {len(documents)} documents.")
 
+        if self.chunker:
+            documents = self.chunker.chunk(documents)
+            print(f"Chunked into {len(documents)} total chunks.")
+
         self.ingest_documents(documents)
+
 
 
 
 
 # RUNRAG Demo script(only for testing it.)
 '''
-from rag_src.rag_pipeline import RunRAG  # or wherever RunRAG is defined
+from rag_src.complete_RAG_Pipeline.RunRAG import RunRAG
+from rag_src.doc_loader.universal_doc_loader import UniversalDocLoader
+from rag_src.llm.gemini import GeminiLLM
+from rag_src.chunker import DefaultChunker
+from dotenv import load_dotenv
+import os
 
+# Load .env file
+load_dotenv()
+
+# Access the key
+gemini_api_key = os.getenv('GEMINI_API_KEY')
 # Initialize with just docdir — everything else uses default classes
+doc_dir=r"D:\data\final_draft.pdf"
 rag = RunRAG(
-    llm=None,
+    llm=GeminiLLM(gemini_api_key),
     embeddor=None,
     indexer=None,
     retriever=None,
     query_transform=None,
     doc_enricher=None,
-    doc_loader=None,
+    doc_loader=UniversalDocLoader(doc_dir),
     preprocessor=None,
-    docdir="docs/"  # directory where sample.txt is saved
+    docdir=r"D:\data\final_draft.pdf",  # directory where sample.txt is saved
+    chunker= DefaultChunker(chunk_size=512, chunk_overlap=50), 
 )
 
 # Step 1: Ingest the documents
 rag.load_and_ingest_documents()
 
 # Step 2: Ask a question
-query = "What is the sun made of?"
+query = "What are RAG?"
 answer = rag.run(query)
 
 print("\n💡 Answer:")
