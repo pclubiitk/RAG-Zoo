@@ -26,7 +26,9 @@ dependencies = [
     "llama-index-embeddings-google-genai (>=0.2.0,<0.3.0)",
     "tavily-python (>=0.7.8,<0.8.0)",
     "duckduckgo-search (>=8.0.4,<9.0.0)",
-    "google-search-results (>=2.4.2,<3.0.0)"
+    "google-search-results (>=2.4.2,<3.0.0)",
+    "weaviate-client (>=4.15.4,<5.0.0)",
+    "chromadb (>=1.0.13,<2.0.0)"
 ]
 
 
