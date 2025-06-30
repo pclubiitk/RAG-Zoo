@@ -4,6 +4,8 @@ from .hyde import HyDe
 from.web_query_transformer import LLMWebQueryTransformer
 from .decomposer import QueryDecomposer
 
+from .decomposer import QueryDecomposer
+from .multiquery import MultiQuery
 
 __all__ = [
     "BaseQueryTransformer",
@@ -11,4 +13,5 @@ __all__ = [
     "HyDe",
     "QueryDecomposer",
     "LLMWebQueryTransformer",
+    "MultiQuery",
 ]
