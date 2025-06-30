@@ -3,7 +3,7 @@ name = "rag-zoo"
 version = "0.1.0"
 description = "A module to easily implement different types of RAG"
 authors = [
-    {name = "Your Name",email = "you@example.com"}
+    {name = "Your Name", email = "you@example.com"}
 ]
 license = {text = "MIT"}
 readme = "README.md"
@@ -29,9 +29,10 @@ dependencies = [
     "google-search-results (>=2.4.2,<3.0.0)",
     "weaviate-client (>=4.15.4,<5.0.0)",
     "chromadb (>=1.0.13,<2.0.0)",
-    "transformers (>=4.53.0,<5.0.0)"
+    "transformers (>=4.53.0,<5.0.0)",
+    "llama-index-core (>=0.12.44,<0.13.0)",
+    "langchain (>=0.3.26,<0.4.0)"
 ]
-
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
