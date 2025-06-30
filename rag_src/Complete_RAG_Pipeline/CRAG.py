@@ -4,9 +4,9 @@ import os
 from rag_src.llm import BaseLLM, DefaultLLM
 from rag_src.retriever import BaseRetriever, DefaultRetriever
 from rag_src.web_retriver import BaseWebRetriever
-from rag_src.web_retriver import HybridWebRetriever
+from rag_src.web_retriver import TavilyWebRetriever
 from rag_src.embedder import BaseEmbedder, DefaultEmbedder
-from rag_src.query_transformer import BaseQueryTransformer, DefaultQueryTransformer
+from rag_src.query_transformer import BaseQueryTransformer, LLMWebQueryTransformer
 from rag_src.doc_context_enricher import BaseContextEnricher, DefaultContextEnricher
 from rag_src.indexer import BaseIndexer, DefaultIndexer
 from rag_src.doc_loader import BaseDocLoader, DefaultDocLoader
@@ -39,14 +39,14 @@ class CRAG:
         self.llm = llm or DefaultLLM()
         self.embeddor = embeddor or DefaultEmbedder()
         self.indexer = indexer or DefaultIndexer()
-        self.query_transform = query_transform or DefaultQueryTransformer()
+        self.query_transform = query_transform or LLMWebQueryTransformer(self.llm)
         self.doc_enricher = doc_enricher or DefaultContextEnricher()
         self.doc_loader = doc_loader or DefaultDocLoader(self.docdir)
         self.preprocessor = preprocessor or DefaultPreprocessor()
         self.chunker = chunker or DefaultChunker()
 
         self.evaluator = evaluator or RelevanceEvaluator(llm=self.llm)
-        self.web_retriever = web_retriever or HybridWebRetriever()
+        self.web_retriever = web_retriever or TavilyWebRetriever()
 
         index_path = getattr(self.indexer, "persist_path", "default_index")
         index_file = os.path.join(index_path, "index.faiss")
@@ -66,12 +66,16 @@ class CRAG:
 
         retrieved_nodes = []
         seen = set()
+
         for q in queries:
             results = self.retriever.retrieve(q)
-            for node in results:
-                if node.text not in seen:
+            for result in results:
+                text = result.get("text", "")
+                metadata = result.get("metadata", {})
+                if text not in seen:
+                    node = TextNode(text=text, metadata=metadata)
                     retrieved_nodes.append(node)
-                    seen.add(node.text)
+                    seen.add(text)
 
         print(f"Step 2: Retrieved {len(retrieved_nodes)} internal documents")
 
@@ -104,25 +108,3 @@ class CRAG:
 
         print(f"Step 4: Final Answer: {answer}")
         return answer
-
-    def ingest_documents(self, documents: List[str], metadata: Optional[List[dict]] = None) -> None:
-        print("=== INDEXING DOCUMENTS ===")
-        embeddings = self.embeddor.embed(documents)
-        self.indexer.index(embeddings, documents, metadata)
-        self.indexer.persist()
-        print("Index persisted.")
-
-    def load_and_ingest_documents(self) -> None:
-        print("=== LOADING DOCUMENTS ===")
-        documents = self.doc_loader.load()
-        print(f"Loaded {len(documents)} raw documents.")
-
-        if self.preprocessor:
-            documents = self.preprocessor.preprocess(documents)
-            print(f"Preprocessed to {len(documents)} documents.")
-
-        if self.chunker:
-            documents = self.chunker.chunk(documents)
-            print(f"Chunked into {len(documents)} total chunks.")
-
-        self.ingest_documents(documents)
