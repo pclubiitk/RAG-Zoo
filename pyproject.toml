@@ -28,7 +28,8 @@ dependencies = [
     "duckduckgo-search (>=8.0.4,<9.0.0)",
     "google-search-results (>=2.4.2,<3.0.0)",
     "weaviate-client (>=4.15.4,<5.0.0)",
-    "chromadb (>=1.0.13,<2.0.0)"
+    "chromadb (>=1.0.13,<2.0.0)",
+    "transformers (>=4.53.0,<5.0.0)"
 ]
 
 
