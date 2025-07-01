@@ -2365,13 +2365,20 @@ deprecated = ">=1.2.18"
 pydantic = ">=2.11.5"
 
 [[package]]
+<<<<<<< HEAD
 name = "llama-index-llms-google-genai"
 version = "0.2.2"
 description = "llama-index llms google genai integration"
+=======
+name = "llama-index-llms-ollama"
+version = "0.6.2"
+description = "llama-index llms ollama integration"
+>>>>>>> f221f14 (Added Ollama llm file, updated toml, made imports absolute)
 optional = false
 python-versions = "<4.0,>=3.9"
 groups = ["main"]
 files = [
+<<<<<<< HEAD
     {file = "llama_index_llms_google_genai-0.2.2-py3-none-any.whl", hash = "sha256:62c9c9aae8a6df1ce50145c3bd01673811fe974151b5d17f56d03e42689d07e3"},
     {file = "llama_index_llms_google_genai-0.2.2.tar.gz", hash = "sha256:c01c8adf135f927260b8f7486cc494cf2318c25017717f9720d4d1250768f350"},
 ]
@@ -2413,6 +2420,15 @@ files = [
 llama-index-core = ">=0.12.0,<0.13.0"
 torch = ">=2.1.2,<3.0.0"
 transformers = {version = ">=4.37.0,<5.0.0", extras = ["torch"]}
+=======
+    {file = "llama_index_llms_ollama-0.6.2-py3-none-any.whl", hash = "sha256:b714311c3a1e3e5c9d9d2a46c1c12cc3e6865e8b81f1863412da41c1725a1144"},
+    {file = "llama_index_llms_ollama-0.6.2.tar.gz", hash = "sha256:1be4081f0ba9c9dd3b5d270c2e8009c256b3b6a1312cb38a0c724dba8bac1304"},
+]
+
+[package.dependencies]
+llama-index-core = ">=0.12.4,<0.13"
+ollama = ">=0.5.1"
+>>>>>>> f221f14 (Added Ollama llm file, updated toml, made imports absolute)
 
 [[package]]
 name = "llama-index-llms-openai"
@@ -3392,13 +3408,20 @@ files = [
 ]
 
 [[package]]
+<<<<<<< HEAD
 name = "oauthlib"
 version = "3.3.1"
 description = "A generic, spec-compliant, thorough implementation of the OAuth request-signing logic"
+=======
+name = "ollama"
+version = "0.5.1"
+description = "The official Python client for Ollama."
+>>>>>>> f221f14 (Added Ollama llm file, updated toml, made imports absolute)
 optional = false
 python-versions = ">=3.8"
 groups = ["main"]
 files = [
+<<<<<<< HEAD
     {file = "oauthlib-3.3.1-py3-none-any.whl", hash = "sha256:88119c938d2b8fb88561af5f6ee0eec8cc8d552b7bb1f712743136eb7523b7a1"},
     {file = "oauthlib-3.3.1.tar.gz", hash = "sha256:0f0f8aa759826a193cf66c12ea1af1637f87b9b4622d46e866952bb022e538c9"},
 ]
@@ -3443,6 +3466,15 @@ numpy = ">=1.21.6"
 packaging = "*"
 protobuf = "*"
 sympy = "*"
+=======
+    {file = "ollama-0.5.1-py3-none-any.whl", hash = "sha256:4c8839f35bc173c7057b1eb2cbe7f498c1a7e134eafc9192824c8aecb3617506"},
+    {file = "ollama-0.5.1.tar.gz", hash = "sha256:5a799e4dc4e7af638b11e3ae588ab17623ee019e496caaf4323efbaa8feeff93"},
+]
+
+[package.dependencies]
+httpx = ">=0.27"
+pydantic = ">=2.9"
+>>>>>>> f221f14 (Added Ollama llm file, updated toml, made imports absolute)
 
 [[package]]
 name = "openai"
@@ -6511,4 +6543,8 @@ cffi = ["cffi (>=1.11)"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.12,<4.0"
+<<<<<<< HEAD
 content-hash = "c131389ba036e8746fe7bc2373f989a3ce64450baeb56c978360139a51d8018b"
+=======
+content-hash = "a27dd15c41529ddc2ce8e573fcc5fb4037800326b8d2e35ecff5fb1b6e537151"
+>>>>>>> f221f14 (Added Ollama llm file, updated toml, made imports absolute)
