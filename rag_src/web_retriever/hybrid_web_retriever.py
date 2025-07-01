@@ -1,7 +1,7 @@
 from .base import BaseWebRetriever
-from .tavily import TavilyWebRetriever
-from .servapi import SerpAPIWebRetriever
-from .duckduckgo import DuckDuckGoWebRetriever
+from .tavily_retriever import TavilyWebRetriever
+from .servapi_retriever import SerpAPIWebRetriever
+from .duckduckgo_retriever import DuckDuckGoWebRetriever
 
 from llama_index.core.schema import TextNode
 from typing import List, Optional, Set
