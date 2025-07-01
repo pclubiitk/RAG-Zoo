@@ -3,8 +3,8 @@ import os
 
 from rag_src.llm import BaseLLM, DefaultLLM
 from rag_src.retriever import BaseRetriever, DefaultRetriever
-from rag_src.web_retriver import BaseWebRetriever
-from rag_src.web_retriver import TavilyWebRetriever
+from rag_src.web_retriever import BaseWebRetriever
+from rag_src.web_retriever import TavilyWebRetriever
 from rag_src.embedder import BaseEmbedder, DefaultEmbedder
 from rag_src.query_transformer import BaseQueryTransformer, LLMWebQueryTransformer
 from rag_src.doc_context_enricher import BaseContextEnricher, DefaultContextEnricher
