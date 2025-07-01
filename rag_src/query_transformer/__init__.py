@@ -11,5 +11,5 @@ __all__ = [
     "HyDe",
     "QueryDecomposer",
     "LLMWebQueryTransformer",
-    "MultiQuery",
+    "MultiQuery"
 ]
