@@ -31,7 +31,9 @@ dependencies = [
     "chromadb (>=1.0.13,<2.0.0)",
     "transformers (>=4.53.0,<5.0.0)",
     "llama-index-core (>=0.12.44,<0.13.0)",
-    "langchain (>=0.3.26,<0.4.0)"
+    "langchain (>=0.3.26,<0.4.0)",
+    "pyvis (>=0.3.2,<0.4.0)",
+    "wikipedia (>=1.4.0,<2.0.0)",
 ]
 
 [build-system]
