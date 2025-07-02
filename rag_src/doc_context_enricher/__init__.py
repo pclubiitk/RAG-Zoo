@@ -1,7 +1,5 @@
 from .base import BaseContextEnricher
 from .default import DefaultContextEnricher
-
-# Newly added enrichment techniques
 from .self_rerank import SelfRerank
 from .doc_summarizer import DocSummarizer
 from .metadata_injector import MetadataInjector
@@ -18,3 +16,4 @@ __all__ = [
     "TopicTagger",
     "SemanticFilter"
 ]
+    
