@@ -1,4 +1,4 @@
-from default import DefaultRetriever
+from .default import DefaultRetriever
 from typing import List, Dict, Any
 import torch
 from transformers import AutoModelForSequenceClassification, AutoTokenizer

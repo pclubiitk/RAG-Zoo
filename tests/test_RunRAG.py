@@ -8,7 +8,7 @@ from rag_src.llm.gemini import GeminiLLM
 from rag_src.chunker import DefaultChunker
 
 @pytest.mark.skipif(
-    not os.path.exists("/home/itspriiyanshu/Downloads/corrected_CONSTITUTION.pdf"),
+    not os.path.exists(r"C:\Users\DELL\Downloads\final_draft.pdf"),
     reason="Document file not found"
 )
 def test_runrag_with_gemini():
@@ -16,7 +16,7 @@ def test_runrag_with_gemini():
     gemini_key = os.getenv("GEMINI_API_KEY")
     assert gemini_key is not None, "GEMINI_API_KEY is not set in the environment"
 
-    doc_path = "/home/itspriiyanshu/Downloads/corrected_CONSTITUTION.pdf"
+    doc_path = r"C:\Users\DELL\Downloads\final_draft.pdf"
     rag = RunRAG(
         llm=GeminiLLM(gemini_key),
         embeddor=None,
@@ -38,4 +38,3 @@ def test_runrag_with_gemini():
     assert isinstance(answer, str), "Expected answer to be a string"
     assert len(answer.strip()) > 0
     print("\n🧪 Gemini Output:\n", answer)
-
