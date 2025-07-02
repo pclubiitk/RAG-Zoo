@@ -2,7 +2,7 @@ import os
 import pytest
 from dotenv import load_dotenv
 
-from rag_src.complete_RAG_Pipeline.ReliableRAG import ReliableRAG
+from rag_src.Complete_RAG_Pipeline.ReliableRAG import ReliableRAG
 from rag_src.llm import GroqLLM
 
 @pytest.mark.skipif(

@@ -1,6 +1,6 @@
 from dotenv import load_dotenv
 from rag_src.llm import GroqLLM
-from rag_src.complete_RAG_Pipeline.CRAG import CRAG
+from rag_src.Complete_RAG_Pipeline.CRAG import CRAG
 import os
 
 load_dotenv()
