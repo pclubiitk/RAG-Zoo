@@ -2415,6 +2415,22 @@ torch = ">=2.1.2,<3.0.0"
 transformers = {version = ">=4.37.0,<5.0.0", extras = ["torch"]}
 
 [[package]]
+name = "llama-index-llms-ollama"
+version = "0.6.2"
+description = "llama-index llms ollama integration"
+optional = false
+python-versions = "<4.0,>=3.9"
+groups = ["main"]
+files = [
+    {file = "llama_index_llms_ollama-0.6.2-py3-none-any.whl", hash = "sha256:b714311c3a1e3e5c9d9d2a46c1c12cc3e6865e8b81f1863412da41c1725a1144"},
+    {file = "llama_index_llms_ollama-0.6.2.tar.gz", hash = "sha256:1be4081f0ba9c9dd3b5d270c2e8009c256b3b6a1312cb38a0c724dba8bac1304"},
+]
+
+[package.dependencies]
+llama-index-core = ">=0.12.4,<0.13"
+ollama = ">=0.5.1"
+
+[[package]]
 name = "llama-index-llms-openai"
 version = "0.4.7"
 description = "llama-index llms openai integration"
@@ -3407,6 +3423,22 @@ files = [
 rsa = ["cryptography (>=3.0.0)"]
 signals = ["blinker (>=1.4.0)"]
 signedtoken = ["cryptography (>=3.0.0)", "pyjwt (>=2.0.0,<3)"]
+
+[[package]]
+name = "ollama"
+version = "0.5.1"
+description = "The official Python client for Ollama."
+optional = false
+python-versions = ">=3.8"
+groups = ["main"]
+files = [
+    {file = "ollama-0.5.1-py3-none-any.whl", hash = "sha256:4c8839f35bc173c7057b1eb2cbe7f498c1a7e134eafc9192824c8aecb3617506"},
+    {file = "ollama-0.5.1.tar.gz", hash = "sha256:5a799e4dc4e7af638b11e3ae588ab17623ee019e496caaf4323efbaa8feeff93"},
+]
+
+[package.dependencies]
+httpx = ">=0.27"
+pydantic = ">=2.9"
 
 [[package]]
 name = "onnxruntime"
@@ -6511,4 +6543,4 @@ cffi = ["cffi (>=1.11)"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.12,<4.0"
-content-hash = "c131389ba036e8746fe7bc2373f989a3ce64450baeb56c978360139a51d8018b"
+content-hash = "4478443dfc9e354f044b58fb1bf4f51fd821724077ceec1612d4b261a95e6e76"

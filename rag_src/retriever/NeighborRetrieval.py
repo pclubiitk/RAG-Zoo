@@ -1,4 +1,4 @@
-from base import BaseRetriever
+from .base import BaseRetriever
 from typing import List, Dict, Any
 
 class NeighborhoodContextRetriever(BaseRetriever):
@@ -20,34 +20,34 @@ class NeighborhoodContextRetriever(BaseRetriever):
         self.chunk_overlap = chunk_overlap
 
     def retrieve(self, query: str) -> List[Dict[str, Any]]:
-    top_chunks = self.base_retriever.retrieve(query)  # underlying semantic/keyword retrieval
-    results = []
+        top_chunks = self.base_retriever.retrieve(query)  # underlying semantic/keyword retrieval
+        results = []
 
-    for chunk in top_chunks:
-        index = chunk["metadata"].get("index")
-        if index is None:
-            continue
+        for chunk in top_chunks:
+            index = chunk["metadata"].get("index")
+            if index is None:
+                continue
 
-        # grab neighbor window
-        start = max(0, index - self.num_neighbors)
-        end = index + self.num_neighbors + 1
-        neighbors = [
-            doc for doc in self.all_documents
-            if start <= doc["metadata"]["index"] < end
-        ]
-        neighbors.sort(key=lambda x: x["metadata"]["index"])
+            # grab neighbor window
+            start = max(0, index - self.num_neighbors)
+            end = index + self.num_neighbors + 1
+            neighbors = [
+                doc for doc in self.all_documents
+                if start <= doc["metadata"]["index"] < end
+            ]
+            neighbors.sort(key=lambda x: x["metadata"]["index"])
 
-        # concatenate with overlap logic
-        combined = neighbors[0]["text"]
-        for i in range(1, len(neighbors)):
-            overlap_start = max(0, len(combined) - self.chunk_overlap)
+            # concatenate with overlap logic
+            combined = neighbors[0]["text"]
+            for i in range(1, len(neighbors)):
+                overlap_start = max(0, len(combined) - self.chunk_overlap)
             combined = combined[:overlap_start] + neighbors[i]["text"]
 
-        results.append({
-            "text": combined,
-            "center_index": index,
-            "neighbor_indices": [doc["metadata"]["index"] for doc in neighbors],
-            "query_chunk": chunk["text"],
-        })
-    return results
+            results.append({
+                "text": combined,
+                "center_index": index,
+                "neighbor_indices": [doc["metadata"]["index"] for doc in neighbors],
+                "query_chunk": chunk["text"],
+            })
+        return results
 
