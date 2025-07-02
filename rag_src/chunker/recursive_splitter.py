@@ -1,12 +1,12 @@
 from typing import List, Dict, Optional
-from .base import BaseChunker
+from rag_src.chunker.base import BaseChunker
 
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from llama_index.core.node_parser import LangchainNodeParser
 from llama_index.core.schema import Document
 
 
-class RecursiveCharacterTextSplitter(BaseChunker):
+class RecursiveChunker(BaseChunker):
     """
     Chunker using Langchain's RecursiveCharacterTextSplitter via LangchainNodeParser.
     Preserves structure and supports metadata prefixing.

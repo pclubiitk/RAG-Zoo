@@ -1,5 +1,5 @@
 from typing import List, Dict, Optional
-from .base import BaseChunker
+from rag_src.chunker.base import BaseChunker
 from llama_index.core.text_splitter import SentenceSplitter
 
 class DefaultChunker(BaseChunker):

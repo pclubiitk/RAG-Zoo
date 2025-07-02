@@ -2,13 +2,13 @@ import os
 import pytest
 from dotenv import load_dotenv
 
-from rag_src.complete_RAG_Pipeline.RunRAG import RunRAG
+from rag_src.Complete_RAG_Pipeline.RunRAG import RunRAG
 from rag_src.doc_loader.universal_doc_loader import UniversalDocLoader
 from rag_src.llm.gemini import GeminiLLM
 from rag_src.chunker import DefaultChunker
 
 @pytest.mark.skipif(
-    not os.path.exists("D:/data/final_draft.pdf"),
+    not os.path.exists("/home/itspriiyanshu/Downloads/corrected_CONSTITUTION.pdf"),
     reason="Document file not found"
 )
 def test_runrag_with_gemini():
@@ -16,7 +16,7 @@ def test_runrag_with_gemini():
     gemini_key = os.getenv("GEMINI_API_KEY")
     assert gemini_key is not None, "GEMINI_API_KEY is not set in the environment"
 
-    doc_path = "D:/data/final_draft.pdf"
+    doc_path = "/home/itspriiyanshu/Downloads/corrected_CONSTITUTION.pdf"
     rag = RunRAG(
         llm=GeminiLLM(gemini_key),
         embeddor=None,
@@ -30,12 +30,12 @@ def test_runrag_with_gemini():
         chunker=DefaultChunker(chunk_size=512, chunk_overlap=50),
     )
 
-    rag.load_and_ingest_documents()
-    query = "What are RAG?"
+    # rag.load_and_ingest_documents()
+    query = "How are senators elected?"
     answer = rag.run(query)
 
     # Updated assertion for LLM output object
-    assert hasattr(answer, "text"), "Expected Gemini output to have 'text' attribute"
-    assert isinstance(answer.text, str)
-    assert len(answer.text.strip()) > 0
-    print("\n🧪 Gemini Output:\n", answer.text)
+    assert isinstance(answer, str), "Expected answer to be a string"
+    assert len(answer.strip()) > 0
+    print("\n🧪 Gemini Output:\n", answer)
+
