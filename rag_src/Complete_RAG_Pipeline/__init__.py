@@ -4,5 +4,6 @@ from .ReliableRAG import ReliableRAG
 __all__ = [
     "RunRAG",
     "CRAG",
-    "ReliableRAG"
+    "ReliableRAG",
+    "GraphRAG",
 ]

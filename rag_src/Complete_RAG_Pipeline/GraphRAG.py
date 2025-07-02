@@ -100,7 +100,7 @@ class GraphRAG:
             graph_store=self.graph_store,
             max_triplets_per_chunk=10,
             include_embeddings=False,
-            llm=self.llm,               # ✅ explicitly passed, so no Settings.llm needed
+            llm=self.llm,             
             embed_model=self.embedder, 
         )
 
