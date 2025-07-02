@@ -1,7 +1,7 @@
 from typing import List, Dict, Any
 from collections import defaultdict
 import heapq
-from base import BaseRetriever
+from .base import BaseRetriever
 import pickle
 import numpy as np
 from sentence_transformers import SentenceTransformer

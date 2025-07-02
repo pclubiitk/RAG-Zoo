@@ -48,12 +48,10 @@ class GraphRAG:
         index_file = os.path.join(index_path, "index.faiss")
 
         if not os.path.exists(index_file):
-            print(
-                f"[INFO] FAISS index not found at {index_file}. Running ingestion pipeline.")
+            print(f"[INFO] FAISS index not found at {index_file}. Running ingestion pipeline.")
             self.load_and_ingest_documents()
         else:
-            print(
-                f"[INFO] Found existing index at {index_file}. Skipping ingestion.")
+            print(f"[INFO] Found existing index at {index_file}. Skipping ingestion.")
 
         self.retriever = retriever or DefaultRetriever(index_path=index_path)
         self.kg_index = None
@@ -75,12 +73,10 @@ class GraphRAG:
 
         # Fallback: if LLM still returns bad title
         if not title or len(title.split()) > 10 or ":" in title:
-            print(
-                f"[WARNING] LLM returned suspicious title: {title}. Falling back to search.")
+            print(f"[WARNING] LLM returned suspicious title: {title}. Falling back to search.")
             results = wikipedia.search(user_query)
             if not results:
-                raise ValueError(
-                    f"No fallback Wikipedia results found for: {user_query}")
+                raise ValueError(f"No fallback Wikipedia results found for: {user_query}")
                 title = results[0]
 
         print(f"[GraphRAG] Using Wikipedia page title: '{title}'")

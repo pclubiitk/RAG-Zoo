@@ -21,8 +21,7 @@ from .gemini import GeminiLLM
 class SmartLLM(BaseLLM, LLM):
     def __init__(self):
         super().__init__()  # ✅ important for Pydantic
-        # ✅ bypass Pydantic restrictions
-        object.__setattr__(self, "llm", self._init_llm())
+        object.__setattr__(self, "llm", self._init_llm())  # ✅ bypass Pydantic restrictions
 
     def _init_llm(self):
         if os.getenv("GEMINI_API_KEY"):
@@ -54,8 +53,7 @@ class SmartLLM(BaseLLM, LLM):
         return CompletionResponse(text=text)
 
     def stream_complete(self, prompt: str, **kwargs) -> CompletionResponseGen:
-        raise NotImplementedError(
-            "SmartLLM does not support stream_complete().")
+        raise NotImplementedError("SmartLLM does not support stream_complete().")
 
     def chat(self, messages: List[ChatMessage], **kwargs) -> ChatResponse:
         raise NotImplementedError("SmartLLM does not support chat().")
@@ -67,8 +65,7 @@ class SmartLLM(BaseLLM, LLM):
         raise NotImplementedError("SmartLLM does not support acomplete().")
 
     async def astream_complete(self, prompt: str, **kwargs) -> AsyncGenerator[CompletionResponse, None]:
-        raise NotImplementedError(
-            "SmartLLM does not support astream_complete().")
+        raise NotImplementedError("SmartLLM does not support astream_complete().")
 
     async def achat(self, messages: List[ChatMessage], **kwargs) -> ChatResponse:
         raise NotImplementedError("SmartLLM does not support achat().")

@@ -1,5 +1,5 @@
 from typing import List
-from .base import BaseContextEnricher
+from rag_src.doc_context_enricher.base import BaseContextEnricher
 
 class DefaultContextEnricher(BaseContextEnricher):
     """

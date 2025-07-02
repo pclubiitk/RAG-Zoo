@@ -8,4 +8,4 @@ class GeminiLLM(BaseLLM):
 
     def generate(self, query: str, contexts: List[str]) -> Union[str, dict]:
         prompt = "\n\n".join(contexts) + "\n\n" + query
-        return self.llm.complete(prompt)
+        return str(self.llm.complete(prompt))

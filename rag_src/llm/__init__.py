@@ -4,6 +4,7 @@ from .groq import GroqLLM
 from .gemini import GeminiLLM
 from .HuggingFace import HuggingFaceLLM
 from .OpenAI import OpenAILLM
+from .Ollama import OllamaLLM
 from .graph_Rag_llm import SmartLLM
 __all__ = [
     "BaseLLM",
@@ -12,5 +13,6 @@ __all__ = [
     "GeminiLLM",
     "HuggingFaceLLM",
     "OpenAILLM",
+    "OllamaLLM",
     "SmartLLM"
 ]

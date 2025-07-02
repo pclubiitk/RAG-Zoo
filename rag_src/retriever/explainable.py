@@ -1,5 +1,5 @@
 from typing import List, Dict, Any
-from base import BaseRetriever
+from .base import BaseRetriever
 from llama_index.llms.ollama import Ollama
 
 class ExplainableRetriever(BaseRetriever):

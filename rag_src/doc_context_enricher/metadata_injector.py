@@ -1,6 +1,10 @@
 
+"""
+Original file is located at
+    https://colab.research.google.com/drive/1VuUZs71O2VeqKL40pUwcoMaBJdyg-ik_
+"""
 
-from .base import BaseContextEnricher
+from rag_src.doc_context_enricher.base import BaseContextEnricher
 from typing import List
 
 class MetadataInjector(BaseContextEnricher):

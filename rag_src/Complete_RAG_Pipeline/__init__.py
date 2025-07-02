@@ -6,4 +6,5 @@ __all__ = [
     "RunRAG",
     "CRAG",
     "GraphRAG",
+    "ReliableRAG",
 ]
