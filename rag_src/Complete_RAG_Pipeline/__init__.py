@@ -1,8 +1,10 @@
 from .RunRAG import RunRAG
 from .CRAG import CRAG
-from .ReliableRAG import ReliableRAG
+from .GraphRAG import GraphRAG
+
 __all__ = [
     "RunRAG",
     "CRAG",
-    "ReliableRAG"
+    "GraphRAG",
+    "ReliableRAG",
 ]

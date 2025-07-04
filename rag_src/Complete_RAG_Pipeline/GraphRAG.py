@@ -101,7 +101,7 @@ class GraphRAG:
             max_triplets_per_chunk=10,
             include_embeddings=False,
             llm=self.llm,               # ✅ explicitly passed, so no Settings.llm needed
-            embed_model=self.embedder, 
+            embed_model=self.embedder,
         )
 
         graph_query = (
