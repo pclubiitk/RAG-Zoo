@@ -2,7 +2,7 @@
 from abc import ABC, abstractmethod
 from typing import List
 
-class BaseContextEnricher(ABC):
+class PostBaseEnricher(ABC):
     """
     Abstract base class for enriching documents before chunking.
     Could include metadata injection, summaries, QA pairs, etc.
