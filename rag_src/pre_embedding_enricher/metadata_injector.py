@@ -1,13 +1,9 @@
 
-"""
-Original file is located at
-    https://colab.research.google.com/drive/1VuUZs71O2VeqKL40pUwcoMaBJdyg-ik_
-"""
 
-from rag_src.doc_context_enricher.base import BaseContextEnricher
+from rag_src.pre_embedding_enricher.base  import PreBaseEnricher
 from typing import List
 
-class MetadataInjector(BaseContextEnricher):
+class MetadataInjector(PreBaseEnricher):
     """
     Adds metadata (like title, author, timestamp) to each document.
     Metadata is provided as a dictionary indexed by document position.
