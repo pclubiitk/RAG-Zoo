@@ -9,5 +9,9 @@ class QueryDecomposer(BaseQueryTransformer):
 
     def transform(self, query: str) -> List[str]:
         metadata = {"index_summary": "None"}  # dummy index summary for now
-        bundle = self.transformer(query, metadata=metadata)
-        return [bundle.query_str]  
+        bundles = self.transformer(query, metadata=metadata)
+        if hasattr(bundles, "subquestions"):
+            return [sq.query_str for sq in bundles.subquestions]
+        else:
+            return [bundles.query_str] 
+
