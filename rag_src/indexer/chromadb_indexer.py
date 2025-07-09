@@ -1,31 +1,20 @@
-# rag_pipeline/indexer/chromadb_indexer.py
-
-from chromadb import Client
-from chromadb.config import Settings
-from chromadb.utils.embedding_functions import DefaultEmbeddingFunction
+from chromadb import PersistentClient
 from typing import List, Optional, Dict, Any
 from .base import BaseIndexer
-
 
 class ChromaDBIndexer(BaseIndexer):
     def __init__(
         self,
         collection_name: str = "rag_documents",
-        persist_directory: str = "./chroma_index",
-        embedding_dim: int = 768  # Set this to match your embedding model
+        persist_directory: str = "./chroma_index"
     ):
-        self.settings = Settings(
-            chroma_db_impl="duckdb+parquet",
-            persist_directory=persist_directory
-        )
-        self.client = Client(self.settings)
+        self.persist_directory = persist_directory
+        self.client = PersistentClient(path=persist_directory)
         self.collection_name = collection_name
-        self.embedding_dim = embedding_dim
 
-        # Create or get collection
         self.collection = self.client.get_or_create_collection(
             name=self.collection_name,
-            embedding_function=None  # We're manually providing embeddings
+            embedding_function=None
         )
 
     def index(
@@ -52,4 +41,5 @@ class ChromaDBIndexer(BaseIndexer):
         )
 
     def persist(self) -> None:
-        self.client.persist()
+        # persistence is automatic in PersistentClient
+        pass

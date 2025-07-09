@@ -13,9 +13,9 @@ from typing import List, AsyncGenerator
 
 import os
 
-from .OpenAI import OpenAILLM
-from .groq import GroqLLM
-from .gemini import GeminiLLM
+from rag_src.llm.OpenAI import OpenAILLM
+from rag_src.llm.groq import GroqLLM
+from rag_src.llm.gemini import GeminiLLM
 
 
 class SmartLLM(BaseLLM, LLM):

@@ -1,48 +1,43 @@
-
-
-import weaviate
-from weaviate.util import get_valid_uuid
-from typing import List, Optional, Dict, Any
 from uuid import uuid4
-from .base import BaseIndexer
+from typing import List, Optional, Dict, Any
+
+from weaviate import connect_to_weaviate_cloud
+from weaviate.collections import Collection
+from weaviate.collections.classes.config import Configure, Property, DataType
+from weaviate.classes.init import Auth
+from weaviate.collections.classes.data import DataObject
+from rag_src.indexer import BaseIndexer
 
 
 class WeaviateIndexer(BaseIndexer):
     def __init__(
         self,
-        weaviate_url: str = "http://localhost:8080",
+        weaviate_url: str,
+        api_key: Optional[str] = None,
         class_name: str = "DocumentChunk",
         recreate_schema: bool = True
     ):
-        self.client = weaviate.Client(weaviate_url)
+        self.client = connect_to_weaviate_cloud(
+            cluster_url=weaviate_url,
+            auth_credentials=Auth.api_key(api_key) if api_key else None
+        )
         self.class_name = class_name
 
-        if recreate_schema and self.client.schema.contains({"classes": [{"class": self.class_name}]}):
-            self.client.schema.delete_class(self.class_name)
+        if recreate_schema and self.client.collections.exists(self.class_name):
+            self.client.collections.delete(name=self.class_name)
 
-        self._ensure_class()
-
-    def _ensure_class(self):
-        """
-        Creates the schema class in Weaviate if it doesn't exist.
-        """
-        if not self.client.schema.contains({"classes": [{"class": self.class_name}]}):
-            schema = {
-                "class": self.class_name,
-                "properties": [
-                    {
-                        "name": "text",
-                        "dataType": ["text"]
-                    },
-                    {
-                        "name": "metadata",
-                        "dataType": ["text"]
-                    }
+        if not self.client.collections.exists(self.class_name):
+            self.client.collections.create(
+                name=self.class_name,
+                properties=[
+                    Property(name="text", data_type=DataType.TEXT),
+                    Property(name="metadata", data_type=DataType.TEXT),
                 ],
-                "vectorIndexType": "hnsw",
-                "vectorizer": "none"
-            }
-            self.client.schema.create_class(schema)
+                vectorizer_config=Configure.Vectorizer.none(),
+                vector_index_config=Configure.VectorIndex.hnsw()
+            )
+
+        self.collection: Collection = self.client.collections.get(self.class_name)
 
     def index(
         self,
@@ -50,29 +45,34 @@ class WeaviateIndexer(BaseIndexer):
         documents: List[str],
         metadata: Optional[List[Dict[str, Any]]] = None
     ) -> None:
-        for i, (vector, doc) in enumerate(zip(embeddings, documents)):
-            meta = metadata[i] if metadata else {}
-            self.client.data_object.create(
-                data_object={
-                    "text": doc,
-                    "metadata": str(meta)
+        objs = []
+        for i, (embedding, text) in enumerate(zip(embeddings, documents)):
+            obj = DataObject(
+                uuid=str(uuid4()),
+                properties={
+                    "text": text,
+                    "metadata": str(metadata[i]) if metadata else "{}"
                 },
-                class_name=self.class_name,
-                vector=vector,
-                uuid=get_valid_uuid(str(uuid4()))
+                vector=embedding
             )
+            objs.append(obj)
 
+        self.collection.data.insert_many(objs)
+        
     def reset(self) -> None:
-        """
-        Clears all documents in the Weaviate class.
-        """
-        if self.client.schema.contains({"classes": [{"class": self.class_name}]}):
-            self.client.schema.delete_class(self.class_name)
-            self._ensure_class()
+        if self.client.collections.exists(self.class_name):
+            self.client.collections.delete(name=self.class_name)
+
+        self.client.collections.create(
+            name=self.class_name,
+            properties=[
+                Property(name="text", data_type=DataType.TEXT),
+                Property(name="metadata", data_type=DataType.TEXT),
+            ],
+            vectorizer_config=Configure.Vectorizer.none(),
+            vector_index_config=Configure.VectorIndex.hnsw()
+        )
+        self.collection = self.client.collections.get(self.class_name)
 
     def persist(self) -> None:
-        """
-        Weaviate handles persistence internally.
-        No-op for now.
-        """
-        print("[INFO] Persistence handled by Weaviate backend.")
+        print("[INFO] Weaviate handles persistence automatically.")
