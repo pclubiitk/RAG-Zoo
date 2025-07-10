@@ -7,7 +7,7 @@ from rag_src.web_retriever import BaseWebRetriever
 from rag_src.web_retriever import TavilyWebRetriever
 from rag_src.embedder import BaseEmbedder, DefaultEmbedder
 from rag_src.query_transformer import BaseQueryTransformer, LLMWebQueryTransformer
-from rag_src.doc_context_enricher import BaseContextEnricher, DefaultContextEnricher
+from rag_src.post_retrival_enricher import PostBaseEnricher, PostDefaultEnricher
 from rag_src.indexer import BaseIndexer, DefaultIndexer
 from rag_src.doc_loader import BaseDocLoader, DefaultDocLoader
 from rag_src.doc_preprocessor import BasePreprocessor, DefaultPreprocessor
@@ -29,7 +29,7 @@ class CRAG:
         web_retriever: Optional[BaseWebRetriever] = None,
         evaluator: Optional[BaseEvaluator] = None,
         query_transform: Optional[BaseQueryTransformer] = None,
-        doc_enricher: Optional[BaseContextEnricher] = None,
+        doc_enricher: Optional[PostBaseEnricher] = None,
         doc_loader: Optional[BaseDocLoader] = None,
         preprocessor: Optional[BasePreprocessor] = None,
         chunker: Optional[BaseChunker] = None,
@@ -40,7 +40,7 @@ class CRAG:
         self.embeddor = embeddor or DefaultEmbedder()
         self.indexer = indexer or DefaultIndexer()
         self.query_transform = query_transform or LLMWebQueryTransformer(self.llm)
-        self.doc_enricher = doc_enricher or DefaultContextEnricher()
+        self.doc_enricher = doc_enricher or PostDefaultEnricher()
         self.doc_loader = doc_loader or DefaultDocLoader(self.docdir)
         self.preprocessor = preprocessor or DefaultPreprocessor()
         self.chunker = chunker or DefaultChunker()

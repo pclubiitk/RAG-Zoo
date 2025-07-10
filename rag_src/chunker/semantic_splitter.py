@@ -1,6 +1,7 @@
 from typing import List, Dict, Optional
 from llama_index.core import Document
 from llama_index.core.node_parser import SemanticSplitterNodeParser
+from llama_index.embeddings.huggingface import HuggingFaceEmbedding  # ✅ Requires: pip install llama-index-embeddings-huggingface
 from rag_src.chunker.base import BaseChunker
 
 
@@ -12,7 +13,12 @@ class SemanticChunker(BaseChunker):
 
     def __init__(self, chunk_size: int = 512, chunk_overlap: int = 50):
         super().__init__(chunk_size, chunk_overlap)
+
+        # ✅ Required embedding model
+        self.embed_model = HuggingFaceEmbedding(model_name="sentence-transformers/all-MiniLM-L6-v2")
+
         self.parser = SemanticSplitterNodeParser(
+            embed_model=self.embed_model,
             chunk_size=chunk_size,
             chunk_overlap=chunk_overlap
         )

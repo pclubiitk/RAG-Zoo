@@ -5,7 +5,7 @@ from rag_src.llm import BaseLLM, SmartLLM
 from rag_src.retriever import BaseRetriever, DefaultRetriever
 from rag_src.embedder import BaseEmbedder, DefaultEmbedder
 from rag_src.query_transformer import BaseQueryTransformer, DefaultQueryTransformer
-from rag_src.doc_context_enricher import BaseContextEnricher, DefaultContextEnricher
+from rag_src.pre_embedding_enricher import PreBaseEnricher, PreDefaultEnricher
 from rag_src.indexer import BaseIndexer, DefaultIndexer
 from rag_src.doc_loader import BaseDocLoader, DefaultDocLoader
 from rag_src.doc_preprocessor import BasePreprocessor, DefaultPreprocessor
@@ -25,7 +25,7 @@ class GraphRAG:
         indexer: Optional[BaseIndexer],
         retriever: Optional[BaseRetriever],
         query_transform: Optional[BaseQueryTransformer],
-        doc_enricher: Optional[BaseContextEnricher],
+        doc_enricher: Optional[PreBaseEnricher],
         doc_loader: Optional[BaseDocLoader],
         preprocessor: Optional[BasePreprocessor],
         docdir: str,
@@ -36,7 +36,7 @@ class GraphRAG:
         self.embedder = embedder or DefaultEmbedder()
         self.indexer = indexer or DefaultIndexer()
         self.query_transform = query_transform or DefaultQueryTransformer()
-        self.doc_enricher = doc_enricher or DefaultContextEnricher()
+        self.doc_enricher = doc_enricher or PreDefaultEnricher()
         self.doc_loader = doc_loader or DefaultDocLoader(self.docdir)
         self.preprocessor = preprocessor or DefaultPreprocessor()
         self.chunker = chunker or DefaultChunker()

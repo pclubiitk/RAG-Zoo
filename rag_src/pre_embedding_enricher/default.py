@@ -1,7 +1,7 @@
 from typing import List
-from rag_src.doc_context_enricher.base import BaseContextEnricher
+from rag_src.pre_embedding_enricher.base import PreBaseEnricher
 
-class DefaultContextEnricher(BaseContextEnricher):
+class PreDefaultEnricher(PreBaseEnricher):
     """
     Default context enricher that performs no enrichment.
     Acts as a passthrough for documents.
