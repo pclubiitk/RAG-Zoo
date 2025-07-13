@@ -2,7 +2,7 @@ import os
 import pytest
 from dotenv import load_dotenv
 
-from rag_src.Complete_RAG_Pipeline.adaptiverag import AdaptiveRAG
+from rag_src.Complete_RAG_Pipeline.AdaptiveRAG import AdaptiveRAG
 from rag_src.doc_loader.universal_doc_loader import UniversalDocLoader
 from rag_src.llm import GroqLLM
 
