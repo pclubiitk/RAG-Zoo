@@ -6,6 +6,7 @@ from .HuggingFace import HuggingFaceLLM
 from .OpenAI import OpenAILLM
 from .Ollama import OllamaLLM
 from .graph_Rag_llm import SmartLLM
+from .HuggingFace import HuggingFaceLLMWrapper
 __all__ = [
     "BaseLLM",
     "DefaultLLM",
@@ -14,5 +15,6 @@ __all__ = [
     "HuggingFaceLLM",
     "OpenAILLM",
     "OllamaLLM",
-    "SmartLLM"
+    "SmartLLM",
+    "HuggingFaceLLMWrapper"
 ]
