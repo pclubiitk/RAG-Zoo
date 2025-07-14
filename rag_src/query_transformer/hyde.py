@@ -11,4 +11,3 @@ class HyDe(BaseQueryTransformer):
     def transform(self, query: str) -> List[str]:
         bundle = self.transformer(query)
         return bundle.custom_embedding_strs or [bundle.query_str]
-
