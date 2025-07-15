@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import Optional
 import os
 
 from rag_src.llm import BaseLLM, DefaultLLM
@@ -52,7 +52,9 @@ class CRAG:
         index_file = os.path.join(index_path, "index.faiss")
 
         if not os.path.exists(index_file):
-            print(f"[INFO] FAISS index not found at {index_file}. Running ingestion pipeline.")
+            print(
+                f"[INFO] FAISS index not found at {index_file}. Running ingestion pipeline."
+            )
             self.load_and_ingest_documents()
         else:
             print(f"[INFO] Found existing index at {index_file}. Skipping ingestion.")
@@ -81,7 +83,9 @@ class CRAG:
 
         # Evaluate document relevance
         context_strings = [node.text for node in retrieved_nodes]
-        eval_result = self.evaluator.evaluate(query, response="", contexts=context_strings)
+        eval_result = self.evaluator.evaluate(
+            query, response="", contexts=context_strings
+        )
 
         if eval_result.get("above_threshold"):
             final_nodes = retrieved_nodes
@@ -89,7 +93,10 @@ class CRAG:
             print("[INFO] Using internal index")
         else:
             final_nodes = self.web_retriever.retrieve(query)
-            sources = [("Web Search", node.metadata.get("source_url", "")) for node in final_nodes]
+            sources = [
+                ("Web Search", node.metadata.get("source_url", ""))
+                for node in final_nodes
+            ]
             print("[INFO] Falling back to web search")
 
         enriched_nodes = self.doc_enricher.enrich(final_nodes)
@@ -103,7 +110,9 @@ class CRAG:
             "Query: {query}\n\nKnowledge:\n{context}\n\nSources:\n{sources}\n\nAnswer:"
         )
 
-        formatted_prompt = prompt.format(query=query, context=context, sources=source_text)
+        formatted_prompt = prompt.format(
+            query=query, context=context, sources=source_text
+        )
         answer = self.llm.generate(formatted_prompt, contexts=[])
 
         print(f"Step 4: Final Answer: {answer}")

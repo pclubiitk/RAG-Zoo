@@ -1,13 +1,13 @@
-
-
-from rag_src.pre_embedding_enricher.base  import PreBaseEnricher
+from rag_src.pre_embedding_enricher.base import PreBaseEnricher
 from typing import List
+
 
 class TopicTagger(PreBaseEnricher):
     """
     Uses the LLM to classify each document's topic.
     Appends the topic as a tag to the beginning of each doc.
     """
+
     def __init__(self, llm):
         self.llm = llm
 

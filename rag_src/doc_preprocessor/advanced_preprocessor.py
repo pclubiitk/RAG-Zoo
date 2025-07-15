@@ -5,6 +5,7 @@ import re
 from nltk.corpus import stopwords
 from .base import BasePreprocessor
 import nltk
+
 nltk.download("stopwords")
 
 
@@ -37,19 +38,19 @@ class AdvancedPreprocessor(BasePreprocessor):
             text = unidecode(text)
 
             # Remove emojis and special symbols
-            text = re.sub(r'[^\w\s.,!?;:()\[\]\'\"-]', '', text)
+            text = re.sub(r"[^\w\s.,!?;:()\[\]\'\"-]", "", text)
 
             # Normalize punctuation spacing (e.g., "hello   , world" → "hello, world")
-            text = re.sub(r'\s*([.,!?;:()\[\]\"-])\s*', r'\1 ', text)
+            text = re.sub(r"\s*([.,!?;:()\[\]\"-])\s*", r"\1 ", text)
 
             # Collapse multiple spaces and newlines
-            text = re.sub(r'\s+', ' ', text).strip()
+            text = re.sub(r"\s+", " ", text).strip()
 
             # Optionally remove stopwords
             if self.remove_stopwords:
                 words = text.split()
                 words = [w for w in words if w not in self.stop_words]
-                text = ' '.join(words)
+                text = " ".join(words)
 
             cleaned_docs.append(text)
 

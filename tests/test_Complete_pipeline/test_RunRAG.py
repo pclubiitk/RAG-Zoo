@@ -7,9 +7,10 @@ from rag_src.doc_loader.universal_doc_loader import UniversalDocLoader
 from rag_src.llm.gemini import GeminiLLM
 from rag_src.chunker import DefaultChunker
 
+
 @pytest.mark.skipif(
     not os.path.exists(r"C:\Users\DELL\Downloads\final_draft.pdf"),
-    reason="Document file not found"
+    reason="Document file not found",
 )
 def test_runrag_with_gemini():
     load_dotenv()

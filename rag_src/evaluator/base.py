@@ -1,7 +1,6 @@
-
-
 from abc import ABC, abstractmethod
 from typing import List, Dict, Any
+
 
 class BaseEvaluator(ABC):
     """
@@ -10,10 +9,7 @@ class BaseEvaluator(ABC):
 
     @abstractmethod
     def evaluate(
-        self,
-        query: str,
-        response: str,
-        contexts: List[str]
+        self, query: str, response: str, contexts: List[str]
     ) -> Dict[str, Any]:
         """
         Evaluate the quality of the response given the query and supporting context.

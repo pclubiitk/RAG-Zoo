@@ -18,7 +18,7 @@ classifiers = [
     "Programming Language :: Python :: 3.12"
 ]
 dependencies = [
-    "llama-index >=0.12.44,<0.13.0",
+    "llama-index (>=0.12.44,<0.13.0)",
     "sentence-transformers >=4.1.0,<5.0.0",
     "faiss-cpu >=1.11.0,<2.0.0",
     "llama-index-llms-openai >=0.4.7,<0.5.0",
@@ -39,12 +39,13 @@ dependencies = [
     "weaviate-client >=4.0,<5.0",
     "chromadb >=1.0.15,<2.0.0",
     "transformers >=4.53.0,<5.0.0",
-    "llama-index-core >=0.12.44,<0.13.0",
+    "llama-index-core (>=0.12.44,<0.13.0)",
     "langchain >=0.3.26,<0.4.0",
     "llama-index-llms-ollama >=0.6.2,<0.7.0",
     "pyvis >=0.3.2,<0.4.0",
     "wikipedia >=1.4.0,<2.0.0",
-    "llama-index-embeddings-huggingface >=0.5.5,<0.6.0"
+    "llama-index-embeddings-huggingface >=0.5.5,<0.6.0",
+    "llama-index-llms-gemini (>=0.5.0,<0.6.0)"
 ]
 
 [project.urls]

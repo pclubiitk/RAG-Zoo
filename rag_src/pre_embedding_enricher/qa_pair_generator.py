@@ -1,7 +1,6 @@
-
-
-from rag_src.pre_embedding_enricher.base  import PreBaseEnricher
+from rag_src.pre_embedding_enricher.base import PreBaseEnricher
 from typing import List
+
 
 class QAPairGenerator(PreBaseEnricher):
     """

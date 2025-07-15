@@ -1,21 +1,22 @@
 from .base import BaseRetriever
 from typing import List, Dict, Any
 import faiss
-import numpy as np
 import pickle
 import os
 from sentence_transformers import SentenceTransformer
+
 
 class DefaultRetriever(BaseRetriever):
     """
     Default retriever using FAISS + SentenceTransformer.
     Loads an existing FAISS index and associated metadata/documents.
     """
+
     def __init__(
         self,
         index_path: str = "default_index",
         model_name: str = "all-MiniLM-L6-v2",
-        top_k: int = 5
+        top_k: int = 5,
     ):
         super().__init__(top_k)
         self.index_path = index_path
@@ -43,9 +44,8 @@ class DefaultRetriever(BaseRetriever):
         results = []
         for i in indices[0]:
             if i < len(self.documents):  # FAISS may return dummy indices if fewer items
-                results.append({
-                    "text": self.documents[i],
-                    "metadata": self.metadata[i]
-                })
+                results.append(
+                    {"text": self.documents[i], "metadata": self.metadata[i]}
+                )
 
         return results

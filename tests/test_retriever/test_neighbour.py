@@ -1,6 +1,7 @@
 from rag_src.retriever.NeighborRetrieval import NeighborhoodContextRetriever
 from unittest.mock import MagicMock
 
+
 def test_neighborhood_context_retriever():
     docs = [
         {"text": "A", "metadata": {"index": 0}},
@@ -9,7 +10,9 @@ def test_neighborhood_context_retriever():
     ]
     base = MagicMock()
     base.retrieve.return_value = [{"text": "B", "metadata": {"index": 1}}]
-    retriever = NeighborhoodContextRetriever(base, docs, num_neighbors=1, chunk_overlap=0)
+    retriever = NeighborhoodContextRetriever(
+        base, docs, num_neighbors=1, chunk_overlap=0
+    )
     results = retriever.retrieve("query")
     assert isinstance(results, list)
     assert "center_index" in results[0]

@@ -3,8 +3,10 @@ import tempfile
 from pathlib import Path
 from rag_src.doc_loader import UniversalDocLoader
 
+
 def write_file(path: Path, content: str):
     path.write_text(content, encoding="utf-8")
+
 
 def test_load_txt_file():
     with tempfile.TemporaryDirectory() as tmpdir:
@@ -16,6 +18,7 @@ def test_load_txt_file():
         result = loader.load()
 
         assert "plain text" in result[0]
+
 
 def test_load_md_file():
     with tempfile.TemporaryDirectory() as tmpdir:
@@ -29,6 +32,7 @@ def test_load_md_file():
         assert "Markdown Header" in result[0]
         assert "Some content" in result[0]
 
+
 def test_load_html_file():
     with tempfile.TemporaryDirectory() as tmpdir:
         tmp_path = Path(tmpdir)
@@ -41,8 +45,10 @@ def test_load_html_file():
         assert "Hello" in result[0]
         assert "World" in result[0]
 
+
 def test_load_docx_file():
     import docx
+
     with tempfile.TemporaryDirectory() as tmpdir:
         tmp_path = Path(tmpdir)
         file = tmp_path / "doc.docx"
@@ -58,8 +64,10 @@ def test_load_docx_file():
         assert "First paragraph" in result[0]
         assert "Second paragraph" in result[0]
 
+
 def test_load_pdf_file():
     import fitz  # PyMuPDF
+
     with tempfile.TemporaryDirectory() as tmpdir:
         tmp_path = Path(tmpdir)
         file = tmp_path / "doc.pdf"
@@ -75,6 +83,7 @@ def test_load_pdf_file():
         result = loader.load()
 
         assert "PDF World" in result[0]
+
 
 def test_invalid_extension_raises():
     with tempfile.TemporaryDirectory() as tmpdir:

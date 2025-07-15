@@ -3,6 +3,7 @@ from llama_index.core.schema import TextNode
 from duckduckgo_search import DDGS
 from typing import List
 
+
 class DuckDuckGoWebRetriever(BaseWebRetriever):
     def __init__(self, max_results: int = 5):
         self.max_results = max_results
@@ -21,7 +22,9 @@ class DuckDuckGoWebRetriever(BaseWebRetriever):
 
                     if snippet:
                         content = f"{title}\n{snippet}"
-                        nodes.append(TextNode(text=content, metadata={"source_url": url}))
+                        nodes.append(
+                            TextNode(text=content, metadata={"source_url": url})
+                        )
 
             print(f"[DUCKDUCKGO] Retrieved {len(nodes)} results.")
             return nodes

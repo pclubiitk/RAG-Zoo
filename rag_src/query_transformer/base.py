@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import List
 
+
 class BaseQueryTransformer(ABC):
     """
     Abstract base class for transforming a user query.

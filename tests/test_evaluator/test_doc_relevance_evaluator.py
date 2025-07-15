@@ -18,16 +18,18 @@ class MockLLM:
         ("0.69", 0.69, False),
         ("0.0", 0.0, False),
         ("invalid", 0.0, False),  # simulating LLM failure
-    ]
+    ],
 )
-def test_evaluate_score_parsing_and_threshold(mock_output, expected_score, expected_above_threshold):
+def test_evaluate_score_parsing_and_threshold(
+    mock_output, expected_score, expected_above_threshold
+):
     mock_llm = MockLLM(output=mock_output)
     evaluator = RelevanceEvaluator(llm=mock_llm, threshold=0.7)
 
     result = evaluator.evaluate(
         query="What is the capital of France?",
         response="Paris is the capital of France.",
-        contexts=["Paris is the capital city of France."]
+        contexts=["Paris is the capital city of France."],
     )
 
     assert isinstance(result, dict)
@@ -38,11 +40,11 @@ def test_evaluate_score_parsing_and_threshold(mock_output, expected_score, expec
 def test_structure_of_output():
     mock_llm = MockLLM("0.85")
     evaluator = RelevanceEvaluator(llm=mock_llm)
-    
+
     result = evaluator.evaluate(
         query="What is 2 + 2?",
         response="The answer is 4.",
-        contexts=["Simple arithmetic operations like 2 + 2 equal 4."]
+        contexts=["Simple arithmetic operations like 2 + 2 equal 4."],
     )
 
     assert "relevance_score" in result

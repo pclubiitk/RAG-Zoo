@@ -1,7 +1,7 @@
-
 from rag_src.post_retrival_enricher.base import PostBaseEnricher
 from typing import List
 import numpy as np
+
 
 class SemanticFilter(PostBaseEnricher):
     """

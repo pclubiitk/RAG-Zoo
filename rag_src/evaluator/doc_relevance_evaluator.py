@@ -14,10 +14,7 @@ class RelevanceEvaluator(BaseEvaluator):
         self.threshold = threshold
 
     def evaluate(
-        self,
-        query: str,
-        response: str,
-        contexts: List[str]
+        self, query: str, response: str, contexts: List[str]
     ) -> Dict[str, Any]:
         context_str = "\n\n".join(contexts)
 
@@ -42,7 +39,4 @@ Reply with only the score as a float. Do not include explanation."""
         except ValueError:
             score = 0.0  # fallback in case LLM fails
 
-        return {
-            "relevance_score": score,
-            "above_threshold": score >= self.threshold
-        }
+        return {"relevance_score": score, "above_threshold": score >= self.threshold}

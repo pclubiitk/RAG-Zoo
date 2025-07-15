@@ -11,7 +11,7 @@ def mock_base_retriever():
     mock = Mock()
     mock.retrieve.return_value = [
         {"text": "The sun emits light and heat."},
-        {"text": "Earth rotates around the sun."}
+        {"text": "Earth rotates around the sun."},
     ]
     return mock
 

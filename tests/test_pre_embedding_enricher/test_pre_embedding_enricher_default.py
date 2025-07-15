@@ -1,5 +1,5 @@
-import pytest
 from rag_src.pre_embedding_enricher.default import PreDefaultEnricher
+
 
 def test_pre_default_enricher_returns_same_docs():
     enricher = PreDefaultEnricher()
@@ -12,6 +12,7 @@ def test_pre_default_enricher_returns_same_docs():
     assert isinstance(output_docs, list)
     assert output_docs == input_docs
     assert all(isinstance(doc, str) for doc in output_docs)
+
 
 def test_pre_default_enricher_empty_input():
     enricher = PreDefaultEnricher()

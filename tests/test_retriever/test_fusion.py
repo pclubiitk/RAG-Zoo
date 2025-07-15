@@ -1,13 +1,14 @@
 from unittest.mock import MagicMock, patch
 from rag_src.retriever.FusionRetrieval import FusionRetriever
 
+
 def test_fusion_retriever():
     # Mock base retriever
     base_retriever = MagicMock()
     base_retriever.retrieve.side_effect = [
         [{"text": "A", "metadata": {}, "score": 1.0}],  # Variant1
         [{"text": "B", "metadata": {}, "score": 2.0}],  # Variant2
-        [{"text": "A", "metadata": {}, "score": 3.0}]   # Original query
+        [{"text": "A", "metadata": {}, "score": 3.0}],  # Original query
     ]
 
     # Patch the LLM inside FusionRetriever to return mock variants

@@ -3,6 +3,7 @@
 from abc import ABC, abstractmethod
 from typing import List, Optional, Dict, Any
 
+
 class BaseIndexer(ABC):
     """
     Abstract base class for indexing embedded documents into a vector store.
@@ -13,7 +14,7 @@ class BaseIndexer(ABC):
         self,
         embeddings: List[List[float]],
         documents: List[str],
-        metadata: Optional[List[Dict[str, Any]]] = None
+        metadata: Optional[List[Dict[str, Any]]] = None,
     ) -> None:
         """
         Indexes a list of embeddings and corresponding documents into the vector store.
