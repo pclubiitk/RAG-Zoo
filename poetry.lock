@@ -6888,7 +6888,12 @@ cffi = {version = ">=1.11", markers = "platform_python_implementation == \"PyPy\
 [package.extras]
 cffi = ["cffi (>=1.11)"]
 
+[extras]
+google = ["google-generativeai", "llama-index-embeddings-google-genai", "llama-index-llms-google-genai"]
+huggingface = ["llama-index-embeddings-huggingface", "llama-index-llms-huggingface", "transformers"]
+ollama = ["llama-index-llms-ollama"]
+
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.12,<4.0"
-content-hash = "0699c24db883658937d590405981a3997b71dec1e7e14050310292735c2bde76"
+content-hash = "f258b724d28e50c7fc058af33244e0384a3219d5a81a7ccffd35f749a719dcd8"

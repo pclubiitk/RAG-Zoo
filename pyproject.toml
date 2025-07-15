@@ -5,37 +5,65 @@ description = "A module to easily implement different types of RAG"
 authors = [
     {name = "Your Name", email = "you@example.com"}
 ]
-license = {text = "MIT"}
+license = "MIT"
 readme = "README.md"
 requires-python = ">=3.12,<4.0"
+keywords = ["rag", "llm", "retrieval-augmented-generation", "nlp", "ai"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3.12"
+]
+
+
 dependencies = [
-    "llama-index (>=0.12.44,<0.13.0)",
-    "sentence-transformers (>=4.1.0,<5.0.0)",
-    "faiss-cpu (>=1.11.0,<2.0.0)",
-    "llama-index-llms-openai (>=0.4.7,<0.5.0)",
-    "llama-index-llms-groq (>=0.3.2,<0.4.0)",
-    "llama-index-llms-google-genai (>=0.2.2,<0.3.0)",
-    "llama-index-llms-huggingface (>=0.5.0,<0.6.0)",
-    "ebooklib (>=0.19,<0.20)",
-    "bs4 (>=0.0.2,<0.0.3)",
-    "unidecode (>=1.4.0,<2.0.0)",
-    "pathlib (>=1.0.1,<2.0.0)",
-    "pymupdf (>=1.26.1,<2.0.0)",
-    "python-docx (>=1.2.0,<2.0.0)",
-    "google-generativeai (>=0.8.5,<0.9.0)",
-    "llama-index-embeddings-google-genai (>=0.2.0,<0.3.0)",
-    "tavily-python (>=0.7.8,<0.8.0)",
-    "duckduckgo-search (>=8.0.4,<9.0.0)",
-    "google-search-results (>=2.4.2,<3.0.0)",
-    "weaviate-client (>=4.0,<5.0)",
-    "chromadb (>=1.0.15,<2.0.0)",
-    "transformers (>=4.53.0,<5.0.0)",
-    "llama-index-core (>=0.12.44,<0.13.0)",
-    "langchain (>=0.3.26,<0.4.0)",
-    "llama-index-llms-ollama (>=0.6.2,<0.7.0)",
-    "pyvis (>=0.3.2,<0.4.0)",
-    "wikipedia (>=1.4.0,<2.0.0)",
-    "llama-index-embeddings-huggingface (>=0.5.5,<0.6.0)"
+    "llama-index >=0.12.44,<0.13.0",
+    "sentence-transformers >=4.1.0,<5.0.0",
+    "faiss-cpu >=1.11.0,<2.0.0",
+    "llama-index-llms-openai >=0.4.7,<0.5.0",
+    "llama-index-llms-groq >=0.3.2,<0.4.0",
+    "llama-index-llms-google-genai >=0.2.2,<0.3.0",
+    "llama-index-llms-huggingface >=0.5.0,<0.6.0",
+    "ebooklib >=0.19,<0.20",
+    "bs4 >=0.0.2,<0.0.3",
+    "unidecode >=1.4.0,<2.0.0",
+    "pathlib >=1.0.1,<2.0.0",
+    "pymupdf >=1.26.1,<2.0.0",
+    "python-docx >=1.2.0,<2.0.0",
+    "google-generativeai >=0.8.5,<0.9.0",
+    "llama-index-embeddings-google-genai >=0.2.0,<0.3.0",
+    "tavily-python >=0.7.8,<0.8.0",
+    "duckduckgo-search >=8.0.4,<9.0.0",
+    "google-search-results >=2.4.2,<3.0.0",
+    "weaviate-client >=4.0,<5.0",
+    "chromadb >=1.0.15,<2.0.0",
+    "transformers >=4.53.0,<5.0.0",
+    "llama-index-core >=0.12.44,<0.13.0",
+    "langchain >=0.3.26,<0.4.0",
+    "llama-index-llms-ollama >=0.6.2,<0.7.0",
+    "pyvis >=0.3.2,<0.4.0",
+    "wikipedia >=1.4.0,<2.0.0",
+    "llama-index-embeddings-huggingface >=0.5.5,<0.6.0"
+]
+
+[project.urls]
+Homepage = "https://github.com/pclubiitk/RAG-Zoo"
+Repository = "https://github.com/pclubiitk/RAG-Zoo"
+
+[project.optional-dependencies]
+google = [
+    "google-generativeai",
+    "llama-index-llms-google-genai",
+    "llama-index-embeddings-google-genai"
+]
+ollama = ["llama-index-llms-ollama"]
+huggingface = [
+    "transformers",
+    "llama-index-llms-huggingface",
+    "llama-index-embeddings-huggingface"
 ]
 
 [build-system]
