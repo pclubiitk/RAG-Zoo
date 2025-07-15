@@ -197,3 +197,5 @@ cython_debug/
 default_index/
 *.faiss
 *.pkl
+
+htmlcov

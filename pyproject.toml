@@ -17,8 +17,6 @@ classifiers = [
     "Operating System :: OS Independent",
     "Programming Language :: Python :: 3.12"
 ]
-
-
 dependencies = [
     "llama-index >=0.12.44,<0.13.0",
     "sentence-transformers >=4.1.0,<5.0.0",
@@ -72,7 +70,19 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.4.1"
+pytest-cov = "^5.0.0"
+black = "^24.4.2"
+ruff = "^0.12.0"
 
 [tool.pytest.ini_options]
 pythonpath = ["."]
 testpaths = ["tests"]
+
+[tool.black]
+line-length = 88
+target-version = ['py312']
+
+[tool.ruff]
+line-length = 88
+target-version = "py312"
+exclude = ["build", "dist", ".venv"]
