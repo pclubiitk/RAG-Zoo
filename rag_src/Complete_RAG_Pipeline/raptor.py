@@ -1,7 +1,6 @@
 # rag_src/complete_RAG_Pipeline/RAPTOR.py
 
-from typing import List, Optional, Dict, Any
-import os
+from typing import List, Optional, Dict
 from langchain.schema import AIMessage
 from sklearn.mixture import GaussianMixture
 import numpy as np

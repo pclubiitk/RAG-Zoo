@@ -1,5 +1,4 @@
 from unittest.mock import patch, MagicMock
-import pytest
 
 
 # Mock the CRAG and GroqLLM components

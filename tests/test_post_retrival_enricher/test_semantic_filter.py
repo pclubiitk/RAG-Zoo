@@ -1,6 +1,5 @@
 import pytest
 from rag_src.post_retrival_enricher.semantic_filter import SemanticFilter
-import numpy as np
 
 
 class DummyEmbedder:
