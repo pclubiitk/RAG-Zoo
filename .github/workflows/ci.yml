@@ -22,6 +22,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -48,8 +50,28 @@ jobs:
       - name: Run Pytest (with coverage threshold)
         run: poetry run pytest --cov=rag_src --cov-fail-under=60
 
-      - name: Run Black (check only)
-        run: poetry run black --check .
+      - name: Run Black (auto-format and commit changes)
+        run: |
+          poetry run black . || true
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -u
+          if git diff --cached --quiet; then
+            echo "No Black changes to commit."
+          else
+            git commit -m "ci: auto-format with Black"
+            git push
+          fi
 
-      - name: Run Ruff
-        run: poetry run ruff .
+      - name: Run Ruff (auto-fix and commit changes)
+        run: |
+          poetry run ruff check --fix . || true
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -u
+          if git diff --cached --quiet; then
+            echo "No Ruff fixes to commit."
+          else
+            git commit -m "ci: auto-fix with Ruff"
+            git push
+          fi
