@@ -8,8 +8,7 @@ load_dotenv()
 
 # Skip the entire test module if no API key is set
 pytestmark = pytest.mark.skipif(
-    not os.getenv("OPENAI_API_KEY"),
-    reason="OPENAI_API_KEY not set in environment."
+    not os.getenv("OPENAI_API_KEY"), reason="OPENAI_API_KEY not set in environment."
 )
 
 

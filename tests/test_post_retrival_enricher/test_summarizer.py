@@ -52,6 +52,7 @@ def test_doc_summarizer_empty_input():
 
     assert result == []
 
+
 def test_doc_summarizer_with_llamaindex_mockllm():
     try:
         from llama_index.core.llms.mock import MockLLM as LlamaMockLLM
@@ -69,5 +70,3 @@ def test_doc_summarizer_with_llamaindex_mockllm():
     result = enricher.enrich(docs)
 
     assert result == ["This is a mock summary."]
-
-

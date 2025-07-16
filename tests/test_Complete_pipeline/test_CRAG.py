@@ -1,5 +1,7 @@
 from unittest.mock import patch, MagicMock
 import pytest
+
+
 # Mock the CRAG and GroqLLM components
 @patch("rag_src.Complete_RAG_Pipeline.CRAG")
 @patch("rag_src.llm.GroqLLM")

@@ -74,4 +74,3 @@ def test_qa_pair_generator_with_llamaindex_mockllm():
     assert len(enriched) == 1
     assert enriched[0].startswith("Q:")
     assert "A:" in enriched[0]
-
