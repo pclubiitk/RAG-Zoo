@@ -52,17 +52,22 @@ def test_doc_summarizer_empty_input():
 
     assert result == []
 
-
 def test_doc_summarizer_with_llamaindex_mockllm():
     try:
         from llama_index.core.llms.mock import MockLLM as LlamaMockLLM
     except ImportError:
         pytest.skip("llama-index-core not installed")
 
-    llama_llm = LlamaMockLLM(response="This is a mock summary.")
+    class MyMockLLM(LlamaMockLLM):
+        def generate(self, prompt, **kwargs):
+            return "This is a mock summary."
+
+    llama_llm = MyMockLLM()
     enricher = DocSummarizer(llm=llama_llm)
 
     docs = ["Realistic input text"]
     result = enricher.enrich(docs)
 
     assert result == ["This is a mock summary."]
+
+
