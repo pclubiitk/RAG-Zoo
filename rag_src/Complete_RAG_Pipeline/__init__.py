@@ -3,7 +3,7 @@ from .CRAG import CRAG
 from .GraphRAG import GraphRAG
 from .AdaptiveRAG import AdaptiveRAG
 from .ReliableRAG import ReliableRAG
-from .raptor import raptor
+from .raptor import RAPTOR
 
 __all__ = [
     "RunRAG",
@@ -11,5 +11,5 @@ __all__ = [
     "GraphRAG",
     "ReliableRAG",
     "AdaptiveRAG",
-    "raptor"
+    "RAPTOR"
 ]

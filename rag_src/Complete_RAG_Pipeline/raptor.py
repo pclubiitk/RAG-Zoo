@@ -19,7 +19,7 @@ from langchain.chains import LLMChain
 from rag_src.llm import BaseLLM, DefaultLLM
 from rag_src.embedder import BaseEmbedder, DefaultEmbedder
 from rag_src.query_transformer import BaseQueryTransformer, DefaultQueryTransformer
-from rag_src.doc_context_enricher import BaseContextEnricher, DefaultContextEnricher
+from rag_src.post_retrival_enricher import PostBaseEnricher, PostDefaultEnricher
 from rag_src.doc_loader import BaseDocLoader, DefaultDocLoader
 from rag_src.doc_preprocessor import BasePreprocessor, DefaultPreprocessor
 from rag_src.chunker import BaseChunker, DefaultChunker
@@ -36,7 +36,7 @@ class RAPTOR:
         doc_loader: Optional[BaseDocLoader] = None,
         preprocessor: Optional[BasePreprocessor] = None,
         chunker: Optional[BaseChunker] = None,
-        doc_enricher: Optional[BaseContextEnricher] = None,
+        doc_enricher: Optional[PostBaseEnricher] = None,
         docdir: str = "data",
     ):
         self.docdir = docdir
@@ -46,7 +46,7 @@ class RAPTOR:
         self.doc_loader = doc_loader or DefaultDocLoader(self.docdir)
         self.preprocessor = preprocessor or DefaultPreprocessor()
         self.chunker = chunker or DefaultChunker()
-        self.doc_enricher = doc_enricher or DefaultContextEnricher()
+        self.doc_enricher = doc_enricher or PostDefaultEnricher()
 
         self.texts=self.load_document()
         self.max_levels=3
