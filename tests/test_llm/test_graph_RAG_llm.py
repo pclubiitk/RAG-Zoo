@@ -32,7 +32,9 @@ def test_complete(mock_llm):
     response = sllm.complete("Tell me something interesting.")
     assert isinstance(response, CompletionResponse)
     assert response.text == "mocked response"
-    mock_llm.generate.assert_called_once_with("Tell me something interesting.", contexts=[])
+    mock_llm.generate.assert_called_once_with(
+        "Tell me something interesting.", contexts=[]
+    )
 
 
 def test_extract_text_string_fallback():

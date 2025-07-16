@@ -3,10 +3,12 @@ import tempfile
 from pathlib import Path
 from rag_src.doc_loader import DefaultDocLoader
 
+
 def create_temp_txt_file(dir_path: Path, filename: str, content: str) -> Path:
     file_path = dir_path / filename
     file_path.write_text(content, encoding="utf-8")
     return file_path
+
 
 def test_load_single_txt_file():
     with tempfile.TemporaryDirectory() as tmpdir:
@@ -18,6 +20,7 @@ def test_load_single_txt_file():
 
         assert len(contents) == 1
         assert contents[0] == "Hello world!"
+
 
 def test_load_multiple_txt_files_from_directory():
     with tempfile.TemporaryDirectory() as tmpdir:
@@ -34,6 +37,7 @@ def test_load_multiple_txt_files_from_directory():
         assert any("File 2 content." in doc for doc in contents)
         assert all(".md" not in doc for doc in contents)
 
+
 def test_invalid_path_raises():
     with tempfile.TemporaryDirectory() as tmpdir:
         tmp_path = Path(tmpdir)
@@ -43,6 +47,7 @@ def test_invalid_path_raises():
         loader = DefaultDocLoader(invalid_file)
         with pytest.raises(ValueError, match="Invalid path"):
             loader.load()
+
 
 def test_empty_txt_file():
     with tempfile.TemporaryDirectory() as tmpdir:

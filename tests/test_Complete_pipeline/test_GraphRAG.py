@@ -8,7 +8,9 @@ from rag_src.Complete_RAG_Pipeline.GraphRAG import GraphRAG
 # Optionally skip if no internet for Wikipedia
 
 
-@pytest.mark.skipif("CI" in os.environ, reason="Skipping test in CI due to no internet access")
+@pytest.mark.skipif(
+    "CI" in os.environ, reason="Skipping test in CI due to no internet access"
+)
 def test_graphrag_with_groq():
     load_dotenv()
     groq_key = os.getenv("GROQ_API_KEY")

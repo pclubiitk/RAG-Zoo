@@ -1,4 +1,4 @@
-from typing import List, Optional, Dict, Any
+from typing import List, Optional
 import os
 
 from rag_src.llm import BaseLLM, DefaultLLM
@@ -62,7 +62,9 @@ class RunRAG:
         index_file = os.path.join(index_path, "index.faiss")
 
         if not os.path.exists(index_file):
-            print(f"[INFO] FAISS index not found at {index_file}. Running ingestion pipeline.")
+            print(
+                f"[INFO] FAISS index not found at {index_file}. Running ingestion pipeline."
+            )
             docs = self.load_preprocess_chunk_documents()
             enriched_docs = self.doc_enricher.enrich(docs)
             print(f"Enriched documents count: {len(enriched_docs)}")
@@ -88,7 +90,9 @@ class RunRAG:
 
         return documents
 
-    def ingest_documents(self, documents: List[str], metadata: Optional[List[dict]] = None) -> None:
+    def ingest_documents(
+        self, documents: List[str], metadata: Optional[List[dict]] = None
+    ) -> None:
         print("=== INDEXING DOCUMENTS ===")
         embeddings = self.embeddor.embed(documents)
         self.indexer.index(embeddings, documents, metadata)
@@ -119,7 +123,11 @@ class RunRAG:
             context_docs = self.retriever.retrieve(q)
             print(f"Retrieved {len(context_docs)} docs")
 
-            context_text = [doc.get("text", "") for doc in context_docs if doc.get("text", "").strip()]
+            context_text = [
+                doc.get("text", "")
+                for doc in context_docs
+                if doc.get("text", "").strip()
+            ]
             final_answer = self.llm.generate(query=q, contexts=context_text)
             answers.append(str(final_answer))
 

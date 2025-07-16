@@ -4,6 +4,7 @@ from .GraphRAG import GraphRAG
 from .AdaptiveRAG import AdaptiveRAG
 from .ReliableRAG import ReliableRAG
 from .raptor import raptor
+
 __all__ = [
     "RunRAG",
     "CRAG",

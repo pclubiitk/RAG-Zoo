@@ -25,7 +25,7 @@ def dummy_data():
 def test_index_and_reset(dummy_data):
     embeddings, documents, metadata = dummy_data
     indexer = DefaultIndexer()
-    
+
     indexer.index(embeddings, documents, metadata)
     assert indexer.faiss_index.ntotal == 3
     assert len(indexer.documents) == 3
@@ -40,7 +40,7 @@ def test_index_and_reset(dummy_data):
 def test_index_without_metadata(dummy_data):
     embeddings, documents, _ = dummy_data
     indexer = DefaultIndexer()
-    
+
     indexer.index(embeddings, documents)
     assert indexer.faiss_index.ntotal == 3
     assert indexer.metadata == [{}] * 3
@@ -49,7 +49,7 @@ def test_index_without_metadata(dummy_data):
 def test_persist_creates_files(temp_index_dir, dummy_data):
     embeddings, documents, metadata = dummy_data
     indexer = DefaultIndexer(persist_path=temp_index_dir)
-    
+
     indexer.index(embeddings, documents, metadata)
     indexer.persist()
 

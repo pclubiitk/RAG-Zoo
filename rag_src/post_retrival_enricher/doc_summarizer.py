@@ -1,7 +1,6 @@
-
-
 from rag_src.post_retrival_enricher.base import PostBaseEnricher
 from typing import List
+
 
 class DocSummarizer(PostBaseEnricher):
     """

@@ -5,7 +5,6 @@ import json
 import csv
 
 from ebooklib import epub
-import os
 
 from rag_src.doc_loader import BaseDocLoader
 

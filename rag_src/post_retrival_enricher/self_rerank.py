@@ -1,6 +1,6 @@
-
 from rag_src.post_retrival_enricher.base import PostBaseEnricher
 from typing import List
+
 
 class SelfRerank(PostBaseEnricher):
     """
@@ -28,4 +28,4 @@ class SelfRerank(PostBaseEnricher):
         ranked_docs.sort(reverse=True, key=lambda x: x[0])
 
         # return only the document part from the top-k tuples
-        return [doc for _, doc in ranked_docs[:self.top_k]]
+        return [doc for _, doc in ranked_docs[: self.top_k]]

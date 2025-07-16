@@ -1,12 +1,9 @@
-import pytest
 from rag_src.pre_embedding_enricher.metadata_injector import MetadataInjector
+
 
 def test_metadata_injector_with_full_metadata():
     docs = ["Document A", "Document B"]
-    metadata = {
-        0: "Title: A\nAuthor: Alice",
-        1: "Title: B\nAuthor: Bob"
-    }
+    metadata = {0: "Title: A\nAuthor: Alice", 1: "Title: B\nAuthor: Bob"}
     enricher = MetadataInjector(metadata)
     enriched = enricher.enrich(docs)
 
@@ -17,11 +14,10 @@ def test_metadata_injector_with_full_metadata():
     assert isinstance(enriched, list)
     assert all(isinstance(doc, str) for doc in enriched)
 
+
 def test_metadata_injector_with_partial_metadata():
     docs = ["Doc X", "Doc Y", "Doc Z"]
-    metadata = {
-        1: "Author: Charlie"
-    }
+    metadata = {1: "Author: Charlie"}
     enricher = MetadataInjector(metadata)
     enriched = enricher.enrich(docs)
 
@@ -29,7 +25,7 @@ def test_metadata_injector_with_partial_metadata():
     assert enriched[1].startswith("Author: Charlie")
     assert "Doc Y" in enriched[1]
     assert enriched[2] == "Doc Z"  # no metadata for index 2
-    
+
 
 def test_metadata_injector_with_no_metadata():
     docs = ["Just text"]
@@ -38,6 +34,7 @@ def test_metadata_injector_with_no_metadata():
     enriched = enricher.enrich(docs)
 
     assert enriched == docs  # unchanged
+
 
 def test_metadata_injector_empty_input():
     enricher = MetadataInjector({})

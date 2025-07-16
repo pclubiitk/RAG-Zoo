@@ -3,6 +3,7 @@
 import pytest
 from rag_src.post_retrival_enricher.self_rerank import SelfRerank
 
+
 class MockLLM:
     def __init__(self, responses):
         self.responses = responses
@@ -13,6 +14,7 @@ class MockLLM:
         self.call_idx += 1
         return response
 
+
 def test_self_rerank_basic_topk2():
     docs = ["doc A", "doc B", "doc C"]
     llm = MockLLM(["0.2", "0.9", "0.6"])
@@ -22,6 +24,7 @@ def test_self_rerank_basic_topk2():
 
     assert result == ["doc B", "doc C"]  # sorted by scores
     assert len(result) == 2
+
 
 def test_self_rerank_fallback_on_llm_failure():
     class MixedLLM:
@@ -58,11 +61,13 @@ def test_self_rerank_less_than_topk():
     assert result == ["only one doc"]
     assert len(result) == 1
 
+
 def test_self_rerank_empty_input():
     reranker = SelfRerank(llm=MockLLM([]), top_k=3)
     result = reranker.enrich([])
 
     assert result == []
+
 
 def test_self_rerank_with_llamaindex_mockllm():
     try:

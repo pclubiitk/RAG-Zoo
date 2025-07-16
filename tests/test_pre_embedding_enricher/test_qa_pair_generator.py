@@ -1,10 +1,13 @@
 import pytest
 from rag_src.pre_embedding_enricher.qa_pair_generator import QAPairGenerator
+
+
 class MockLLM:
     def generate(self, prompt):
         if "error" in prompt:
             raise ValueError("Simulated LLM failure")
         return "Q: What is Python?\nA: A programming language."
+
 
 def test_qa_pair_generator_basic_generation():
     docs = ["Python is a programming language."]
@@ -16,6 +19,7 @@ def test_qa_pair_generator_basic_generation():
     assert enriched[0].startswith("Q:")
     assert "A:" in enriched[0]
 
+
 def test_qa_pair_generator_multiple_docs():
     docs = ["Doc1", "Doc2"]
     enricher = QAPairGenerator(llm=MockLLM())
@@ -23,6 +27,7 @@ def test_qa_pair_generator_multiple_docs():
 
     assert len(enriched) == 2
     assert all("Q:" in e and "A:" in e for e in enriched)
+
 
 def test_qa_pair_generator_handles_llm_failure():
     class FailingLLM:
@@ -34,6 +39,7 @@ def test_qa_pair_generator_handles_llm_failure():
     enriched = enricher.enrich(docs)
 
     assert enriched[0] == docs[0]
+
 
 def test_qa_pair_generator_mixed_results():
     class CustomLLM:
@@ -49,13 +55,16 @@ def test_qa_pair_generator_mixed_results():
     assert enriched[0] == "Q: Generated QA"
     assert enriched[1] == "Doc 2"
 
+
 def test_qa_pair_generator_with_llamaindex_mockllm():
     try:
         from llama_index.core.llms.mock import MockLLM as LlamaMockLLM
     except ImportError:
         pytest.skip("llama-index-core not installed")
 
-    llama_llm = LlamaMockLLM(response="Q: What is RAG?\nA: A retrieval-augmented generation system.")
+    llama_llm = LlamaMockLLM(
+        response="Q: What is RAG?\nA: A retrieval-augmented generation system."
+    )
     enricher = QAPairGenerator(llm=llama_llm)
     docs = ["RAG helps enhance LLMs with external knowledge."]
     enriched = enricher.enrich(docs)

@@ -17,7 +17,7 @@ class MockLLM:
         ("No. The answer adds facts not present in the context.", True),
         ("no. It includes unrelated information.", True),
         ("yes", False),
-    ]
+    ],
 )
 def test_evaluate_hallucination_detection(llm_output, expected_hallucination):
     mock_llm = MockLLM(response_text=llm_output)
@@ -26,7 +26,7 @@ def test_evaluate_hallucination_detection(llm_output, expected_hallucination):
     result = evaluator.evaluate(
         query="What is the capital of France?",
         response="The capital of France is Paris.",
-        contexts=["Paris is the capital of France."]
+        contexts=["Paris is the capital of France."],
     )
 
     assert result["hallucination_detected"] == expected_hallucination
@@ -41,7 +41,7 @@ def test_evaluate_output_structure():
     result = evaluator.evaluate(
         query="What is 2 + 2?",
         response="2 + 2 is 4.",
-        contexts=["Basic arithmetic operations like 2 + 2 equal 4."]
+        contexts=["Basic arithmetic operations like 2 + 2 equal 4."],
     )
 
     assert "hallucination_detected" in result

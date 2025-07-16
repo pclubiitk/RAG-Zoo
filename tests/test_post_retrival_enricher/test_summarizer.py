@@ -1,10 +1,12 @@
 import pytest
 from rag_src.post_retrival_enricher.doc_summarizer import DocSummarizer
 
+
 class MockLLM:
     def generate(self, prompt):
         assert "Summarize the following document" in prompt
         return "This is a summary."
+
 
 def test_doc_summarizer_basic():
     llm = MockLLM()
@@ -17,6 +19,7 @@ def test_doc_summarizer_basic():
     assert len(result) == 1
     assert result[0] == "This is a summary."
 
+
 def test_doc_summarizer_multiple_docs():
     llm = MockLLM()
     enricher = DocSummarizer(llm=llm)
@@ -26,6 +29,7 @@ def test_doc_summarizer_multiple_docs():
 
     assert len(result) == 2
     assert all(summary == "This is a summary." for summary in result)
+
 
 def test_doc_summarizer_fallback_on_error():
     class FaultyLLM:
@@ -38,6 +42,7 @@ def test_doc_summarizer_fallback_on_error():
 
     assert result == docs  # fallback used
 
+
 def test_doc_summarizer_empty_input():
     llm = MockLLM()
     enricher = DocSummarizer(llm=llm)
@@ -46,6 +51,7 @@ def test_doc_summarizer_empty_input():
     result = enricher.enrich(docs)
 
     assert result == []
+
 
 def test_doc_summarizer_with_llamaindex_mockllm():
     try:
