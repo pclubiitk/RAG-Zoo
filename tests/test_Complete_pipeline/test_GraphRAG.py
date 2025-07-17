@@ -27,7 +27,7 @@ def test_graphrag_with_groq():
         doc_loader=None,
         preprocessor=None,
         # or any path for doc loading (won't be used in Wikipedia mode)
-        docdir=r"D:\Downloads\final_draft.pdf",
+        docdir=r"tests/assests/sample1.pdf",
         chunker=None,
     )
 

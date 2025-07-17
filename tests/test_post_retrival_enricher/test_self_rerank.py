@@ -22,7 +22,7 @@ def test_self_rerank_basic_topk2():
 
     result = reranker.enrich(docs)
 
-    assert result == ["doc B", "doc C"]  # sorted by scores
+    assert result == ["doc B", "doc C"]
     assert len(result) == 2
 
 
@@ -45,7 +45,6 @@ def test_self_rerank_fallback_on_llm_failure():
 
     result = reranker.enrich(docs)
 
-    # doc B (0.7), doc C or D (both 0.5, one from LLM, one fallback)
     assert len(result) == 2
     assert "doc B" in result
     assert any(doc in result for doc in ["doc C", "doc D"])
@@ -72,11 +71,19 @@ def test_self_rerank_empty_input():
 def test_self_rerank_with_llamaindex_mockllm():
     try:
         from llama_index.core.llms.mock import MockLLM as LlamaMockLLM
+        from llama_index.core.base.llms.types import CompletionResponse
+        from pydantic import Field
     except ImportError:
         pytest.skip("llama-index-core not installed")
 
+    class PatchedMockLLM(LlamaMockLLM):
+        fixed_response: str = Field(default="0.7")
+
+        def complete(self, prompt, **kwargs):
+            return CompletionResponse(text=self.fixed_response)
+
     docs = ["doc A", "doc B", "doc C"]
-    llama_llm = LlamaMockLLM(response="0.7")  # same score for all
+    llama_llm = PatchedMockLLM()
     reranker = SelfRerank(llm=llama_llm, top_k=2)
 
     result = reranker.enrich(docs)

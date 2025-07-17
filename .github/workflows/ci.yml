@@ -1,0 +1,77 @@
+name: CI
+
+on:
+  push:
+    branches: ["*"]
+  pull_request:
+    branches: ["*"]
+
+jobs:
+  test:
+    name: Run Tests and Linters
+    runs-on: ubuntu-latest
+
+    env:
+      GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+      TAVILY_API_KEY: ${{ secrets.TAVILY_API_KEY }}
+      GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      WEAVIATE_API_KEY: ${{ secrets.WEAVIATE_API_KEY }}
+      WEAVIATE_URL: ${{ secrets.WEAVIATE_URL }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install Poetry
+        run: |
+          curl -sSL https://install.python-poetry.org | python3 -
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
+
+      - name: Install dependencies
+        run: poetry install --no-interaction --no-root
+
+      - name: Create .env file for API keys
+        run: |
+          echo "GROQ_API_KEY=$GROQ_API_KEY" >> .env
+          echo "TAVILY_API_KEY=$TAVILY_API_KEY" >> .env
+          echo "GOOGLE_API_KEY=$GOOGLE_API_KEY" >> .env
+          echo "OPENAI_API_KEY=$OPENAI_API_KEY" >> .env
+          echo "WEAVIATE_API_KEY=$WEAVIATE_API_KEY" >> .env
+          echo "WEAVIATE_URL=$WEAVIATE_URL" >> .env
+
+      - name: Run Pytest (with coverage threshold)
+        run: poetry run pytest --cov=rag_src --cov-fail-under=60
+
+      - name: Run Black (auto-format and commit changes)
+        run: |
+          poetry run black . || true
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -u
+          if git diff --cached --quiet; then
+            echo "No Black changes to commit."
+          else
+            git commit -m "ci: auto-format with Black"
+            git push
+          fi
+
+      - name: Run Ruff (auto-fix and commit changes)
+        run: |
+          poetry run ruff check --fix . || true
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -u
+          if git diff --cached --quiet; then
+            echo "No Ruff fixes to commit."
+          else
+            git commit -m "ci: auto-fix with Ruff"
+            git push
+          fi

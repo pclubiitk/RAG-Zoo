@@ -1,17 +1,20 @@
 import os
 import pytest
+from openai import RateLimitError  # ✅ Correct import
 from rag_src.embedder import OpenAIEmbedder
 from dotenv import load_dotenv
 
 load_dotenv()
 
+# Skip the entire test module if no API key is set
+pytestmark = pytest.mark.skipif(
+    not os.getenv("OPENAI_API_KEY"), reason="OPENAI_API_KEY not set in environment."
+)
+
 
 @pytest.fixture
 def api_key():
-    key = os.getenv("OPENAI_API_KEY")
-    if not key:
-        pytest.skip("OPENAI_API_KEY not set in environment.")
-    return key
+    return os.getenv("OPENAI_API_KEY")
 
 
 @pytest.fixture
@@ -21,7 +24,10 @@ def embedder(api_key):
 
 def test_embedding_output_shape(embedder):
     texts = ["This is a test.", "Embeddings from OpenAI."]
-    embeddings = embedder.embed(texts)
+    try:
+        embeddings = embedder.embed(texts)
+    except RateLimitError:
+        pytest.skip("OpenAI quota exceeded")
 
     assert isinstance(embeddings, list)
     assert len(embeddings) == len(texts)
@@ -31,12 +37,15 @@ def test_embedding_output_shape(embedder):
 
 def test_query_vs_document_modes(embedder):
     texts = ["OpenAI rocks."]
-    emb_doc = embedder.embed(texts, mode="document")
-    emb_query = embedder.embed(texts, mode="query")
+    try:
+        emb_doc = embedder.embed(texts, mode="document")
+        emb_query = embedder.embed(texts, mode="query")
+    except RateLimitError:
+        pytest.skip("OpenAI quota exceeded")
 
     assert isinstance(emb_doc, list)
     assert isinstance(emb_query, list)
-    assert len(emb_doc[0]) == len(emb_query[0])  # Same model → same dimension
+    assert len(emb_doc[0]) == len(emb_query[0])
 
 
 def test_empty_input(embedder):

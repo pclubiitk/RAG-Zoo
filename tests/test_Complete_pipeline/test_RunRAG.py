@@ -14,10 +14,10 @@ from rag_src.chunker import DefaultChunker
 )
 def test_runrag_with_gemini():
     load_dotenv()
-    gemini_key = os.getenv("GEMINI_API_KEY")
-    assert gemini_key is not None, "GEMINI_API_KEY is not set in the environment"
+    gemini_key = os.getenv("GOOGLE_API_KEY")
+    assert gemini_key is not None, "GOOGLE_API_KEY is not set in the environment"
 
-    doc_path = r"C:\Users\DELL\Downloads\final_draft.pdf"
+    doc_path = r"tests/assests/sample1.pdf"
     rag = RunRAG(
         llm=GeminiLLM(gemini_key),
         embeddor=None,

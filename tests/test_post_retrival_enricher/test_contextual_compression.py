@@ -18,3 +18,6 @@ def test_contextual_compression_basic():
     assert isinstance(result, list)
     assert all(isinstance(doc, Document) for doc in result)
     assert all(doc.text.strip() != "" for doc in result)
+
+
+# this is a dummy commit

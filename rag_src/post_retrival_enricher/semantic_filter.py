@@ -30,8 +30,12 @@ class SemanticFilter(PostBaseEnricher):
             try:
                 doc_emb = self.embedder.embed(doc)
                 score = self.cosine_sim(doc_emb, self.query_embedding)
-                if score >= self.threshold:
+
+                if np.isnan(score):  # fallback for invalid cosine similarity
                     filtered_docs.append(doc)
-            except:
+                elif score >= self.threshold:
+                    filtered_docs.append(doc)
+            except Exception:
                 filtered_docs.append(doc)  # fallback: keep doc if error
+
         return filtered_docs

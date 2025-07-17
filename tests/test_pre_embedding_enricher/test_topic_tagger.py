@@ -48,7 +48,11 @@ def test_topic_tagger_with_llamaindex_mockllm():
     except ImportError:
         pytest.skip("llama-index-core not installed")
 
-    llama_llm = LlamaMockLLM(response="finance")
+    class CustomMockLLM(LlamaMockLLM):
+        def generate(self, prompt, **kwargs):
+            return "finance"
+
+    llama_llm = CustomMockLLM()
     enricher = TopicTagger(llm=llama_llm)
     docs = ["Stock markets fluctuate due to investor behavior."]
     enriched = enricher.enrich(docs)

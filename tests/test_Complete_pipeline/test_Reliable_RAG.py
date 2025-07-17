@@ -7,7 +7,7 @@ from rag_src.llm import GroqLLM
 
 
 @pytest.mark.skipif(
-    not os.path.exists("D:/data/final_draft.pdf"),
+    not os.path.exists("tests/assests/sample1.pdf"),
     reason="PDF document missing for test",
 )
 def test_reliable_rag_groq_response():
@@ -16,7 +16,7 @@ def test_reliable_rag_groq_response():
     assert api_key is not None, "GROQ_API_KEY is missing in .env"
 
     # Initialize ReliableRAG with Groq LLM
-    rag = ReliableRAG(llm=GroqLLM(api_key=api_key), docdir="D:/data/final_draft.pdf")
+    rag = ReliableRAG(llm=GroqLLM(api_key=api_key), docdir="tests/assests/sample1.pdf")
 
     query = "What is Retrieval-Augmented Generation?"
     answer = rag.run(query)

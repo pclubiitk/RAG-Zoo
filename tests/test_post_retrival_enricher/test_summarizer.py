@@ -59,7 +59,11 @@ def test_doc_summarizer_with_llamaindex_mockllm():
     except ImportError:
         pytest.skip("llama-index-core not installed")
 
-    llama_llm = LlamaMockLLM(response="This is a mock summary.")
+    class MyMockLLM(LlamaMockLLM):
+        def generate(self, prompt, **kwargs):
+            return "This is a mock summary."
+
+    llama_llm = MyMockLLM()
     enricher = DocSummarizer(llm=llama_llm)
 
     docs = ["Realistic input text"]

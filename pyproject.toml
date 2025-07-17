@@ -45,7 +45,8 @@ dependencies = [
     "pyvis >=0.3.2,<0.4.0",
     "wikipedia >=1.4.0,<2.0.0",
     "llama-index-embeddings-huggingface >=0.5.5,<0.6.0",
-    "llama-index-llms-gemini (>=0.5.0,<0.6.0)"
+    "llama-index-llms-gemini (>=0.5.0,<0.6.0)",
+    "langchain-community (>=0.3.27,<0.4.0)"
 ]
 
 [project.urls]
@@ -68,6 +69,12 @@ huggingface = [
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.poetry]
+packages = [
+  { include = "rag_src" }
+]
+
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.4.1"

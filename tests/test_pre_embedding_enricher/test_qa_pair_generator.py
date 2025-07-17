@@ -62,9 +62,11 @@ def test_qa_pair_generator_with_llamaindex_mockllm():
     except ImportError:
         pytest.skip("llama-index-core not installed")
 
-    llama_llm = LlamaMockLLM(
-        response="Q: What is RAG?\nA: A retrieval-augmented generation system."
-    )
+    class MyMockLLM(LlamaMockLLM):
+        def generate(self, prompt, **kwargs):
+            return "Q: What is RAG?\nA: A retrieval-augmented generation system."
+
+    llama_llm = MyMockLLM()
     enricher = QAPairGenerator(llm=llama_llm)
     docs = ["RAG helps enhance LLMs with external knowledge."]
     enriched = enricher.enrich(docs)
