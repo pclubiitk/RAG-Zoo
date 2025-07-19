@@ -65,6 +65,7 @@ huggingface = [
     "llama-index-llms-huggingface",
     "llama-index-embeddings-huggingface"
 ]
+rag_src = { from = "." }
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
