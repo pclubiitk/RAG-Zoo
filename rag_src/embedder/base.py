@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import List, Literal
 
+
 class BaseEmbedder(ABC):
     """
     Abstract base class for embedding documents or queries into vector representations.
@@ -11,9 +12,7 @@ class BaseEmbedder(ABC):
 
     @abstractmethod
     def embed(
-        self,
-        texts: List[str],
-        mode: Literal["query", "document"] = "document"
+        self, texts: List[str], mode: Literal["query", "document"] = "document"
     ) -> List[List[float]]:
         """
         Converts input texts (chunks or queries) into embeddings.

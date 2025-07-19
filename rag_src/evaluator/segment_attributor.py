@@ -15,10 +15,7 @@ class SegmentAttributor(BaseEvaluator):
         self.llm = llm
 
     def locate_segments(
-        self,
-        query: str,
-        response: str,
-        docs: List[TextNode]
+        self, query: str, response: str, docs: List[TextNode]
     ) -> List[Dict[str, Any]]:
         """
         Extract exact document segments that support the generated answer.
@@ -47,13 +44,8 @@ class SegmentAttributor(BaseEvaluator):
 
     # Optional: Make it compatible with BaseEvaluator
     def evaluate(
-        self,
-        query: str,
-        response: str,
-        contexts: List[str]
+        self, query: str, response: str, contexts: List[str]
     ) -> Dict[str, Any]:
         return self.locate_segments(
-            query=query,
-            response=response,
-            docs=[TextNode(text=c) for c in contexts]
+            query=query, response=response, docs=[TextNode(text=c) for c in contexts]
         )

@@ -1,11 +1,11 @@
 from typing import List, Optional
 import os
 
-from rag_src.llm import BaseLLM, SmartLLM
+from rag_src.llm import SmartLLM
 from rag_src.retriever import BaseRetriever, DefaultRetriever
 from rag_src.embedder import BaseEmbedder, DefaultEmbedder
 from rag_src.query_transformer import BaseQueryTransformer, DefaultQueryTransformer
-from rag_src.doc_context_enricher import BaseContextEnricher, DefaultContextEnricher
+from rag_src.pre_embedding_enricher import PreBaseEnricher, PreDefaultEnricher
 from rag_src.indexer import BaseIndexer, DefaultIndexer
 from rag_src.doc_loader import BaseDocLoader, DefaultDocLoader
 from rag_src.doc_preprocessor import BasePreprocessor, DefaultPreprocessor
@@ -25,7 +25,7 @@ class GraphRAG:
         indexer: Optional[BaseIndexer],
         retriever: Optional[BaseRetriever],
         query_transform: Optional[BaseQueryTransformer],
-        doc_enricher: Optional[BaseContextEnricher],
+        doc_enricher: Optional[PreBaseEnricher],
         doc_loader: Optional[BaseDocLoader],
         preprocessor: Optional[BasePreprocessor],
         docdir: str,
@@ -36,7 +36,7 @@ class GraphRAG:
         self.embedder = embedder or DefaultEmbedder()
         self.indexer = indexer or DefaultIndexer()
         self.query_transform = query_transform or DefaultQueryTransformer()
-        self.doc_enricher = doc_enricher or DefaultContextEnricher()
+        self.doc_enricher = doc_enricher or PreDefaultEnricher()
         self.doc_loader = doc_loader or DefaultDocLoader(self.docdir)
         self.preprocessor = preprocessor or DefaultPreprocessor()
         self.chunker = chunker or DefaultChunker()
@@ -48,10 +48,13 @@ class GraphRAG:
         index_file = os.path.join(index_path, "index.faiss")
 
         if not os.path.exists(index_file):
-            print(f"[INFO] FAISS index not found at {index_file}. Running ingestion pipeline.")
+            print(
+                f"[INFO] FAISS index not found at {index_file}. Running ingestion pipeline."
+            )
             self.load_and_ingest_documents()
         else:
-            print(f"[INFO] Found existing index at {index_file}. Skipping ingestion.")
+            print(
+                f"[INFO] Found existing index at {index_file}. Skipping ingestion.")
 
         self.retriever = retriever or DefaultRetriever(index_path=index_path)
         self.kg_index = None
@@ -73,10 +76,14 @@ class GraphRAG:
 
         # Fallback: if LLM still returns bad title
         if not title or len(title.split()) > 10 or ":" in title:
-            print(f"[WARNING] LLM returned suspicious title: {title}. Falling back to search.")
+            print(
+                f"[WARNING] LLM returned suspicious title: {title}. Falling back to search."
+            )
             results = wikipedia.search(user_query)
             if not results:
-                raise ValueError(f"No fallback Wikipedia results found for: {user_query}")
+                raise ValueError(
+                    f"No fallback Wikipedia results found for: {user_query}"
+                )
                 title = results[0]
 
         print(f"[GraphRAG] Using Wikipedia page title: '{title}'")
@@ -100,8 +107,8 @@ class GraphRAG:
             graph_store=self.graph_store,
             max_triplets_per_chunk=10,
             include_embeddings=False,
-            llm=self.llm,             
-            embed_model=self.embedder, 
+            llm=self.llm,
+            embed_model=self.embedder,
         )
 
         graph_query = (
@@ -138,7 +145,7 @@ class GraphRAG:
             bgcolor="#222222",
             font_color="white",
             notebook=False,
-            directed=True
+            directed=True,
         )
 
         for subj, pred, obj in triplets:
@@ -150,7 +157,9 @@ class GraphRAG:
         net.show(output_file)
         print(f"Graph saved to: {output_file}")
 
-    def ingest_documents(self, documents: List[str], metadata: Optional[List[dict]] = None) -> None:
+    def ingest_documents(
+        self, documents: List[str], metadata: Optional[List[dict]] = None
+    ) -> None:
         if not self.embedder or not self.indexer:
             raise ValueError("Embedder or indexer not set.")
 

@@ -3,6 +3,7 @@
 from abc import ABC, abstractmethod
 from typing import List, Optional, Dict
 
+
 class BaseChunker(ABC):
     """
     Abstract base class for chunking documents into smaller parts.
@@ -15,9 +16,7 @@ class BaseChunker(ABC):
 
     @abstractmethod
     def chunk(
-        self,
-        docs: List[str],
-        metadata: Optional[List[Dict[str, str]]] = None
+        self, docs: List[str], metadata: Optional[List[Dict[str, str]]] = None
     ) -> List[str]:
         """
         Splits each document into overlapping or non-overlapping chunks.

@@ -8,7 +8,7 @@ from rag_src.retriever import BaseRetriever, DefaultRetriever
 from rag_src.web_retriever import BaseWebRetriever, TavilyWebRetriever
 from rag_src.embedder import BaseEmbedder, DefaultEmbedder
 from rag_src.query_transformer import BaseQueryTransformer, DefaultQueryTransformer
-from rag_src.doc_context_enricher import BaseContextEnricher, DefaultContextEnricher
+from rag_src.post_retrival_enricher import PostBaseEnricher, PostDefaultEnricher
 from rag_src.indexer import BaseIndexer, DefaultIndexer
 from rag_src.doc_loader import BaseDocLoader, DefaultDocLoader
 from rag_src.doc_preprocessor import BasePreprocessor, DefaultPreprocessor
@@ -34,20 +34,22 @@ class ReliableRAG:
         doc_loader: Optional[BaseDocLoader] = None,
         preprocessor: Optional[BasePreprocessor] = None,
         chunker: Optional[BaseChunker] = None,
-        doc_enricher: Optional[BaseContextEnricher] = None,
+        doc_enricher: Optional[PostBaseEnricher] = None,
         docdir: str = "data",
     ):
         self.docdir = docdir
         self.llm = llm or DefaultLLM()
         self.embeddor = embeddor or DefaultEmbedder()
         self.indexer = indexer or DefaultIndexer()
-        self.retriever = retriever or DefaultRetriever(index_path=getattr(self.indexer, "persist_path", "default_index"))
+        self.retriever = retriever or DefaultRetriever(
+            index_path=getattr(self.indexer, "persist_path", "default_index")
+        )
         self.web_retriever = web_retriever or TavilyWebRetriever()
         self.query_transform = query_transform or DefaultQueryTransformer()
         self.doc_loader = doc_loader or DefaultDocLoader(self.docdir)
         self.preprocessor = preprocessor or DefaultPreprocessor()
         self.chunker = chunker or DefaultChunker()
-        self.doc_enricher = doc_enricher or DefaultContextEnricher()
+        self.doc_enricher = doc_enricher or PostDefaultEnricher()
 
         self.relevance_grader = RelevanceEvaluator(llm=self.llm)
         self.hallucination_grader = DefaultEvaluator(llm=self.llm)
@@ -70,14 +72,18 @@ class ReliableRAG:
             results = self.retriever.retrieve(q)
             for node in results:
                 if node["text"] not in seen:
-                    text_node = TextNode(text=node["text"], metadata=node.get("metadata", {}))
+                    text_node = TextNode(
+                        text=node["text"], metadata=node.get("metadata", {})
+                    )
                     retrieved_nodes.append(text_node)
                     seen.add(node["text"])
         print(f"Step 2: Retrieved {len(retrieved_nodes)} internal docs")
 
         # Evaluate relevance
         context_strings = [n.text for n in retrieved_nodes]
-        is_relevant = self.relevance_grader.evaluate(query, response="", contexts=context_strings).get("above_threshold")
+        is_relevant = self.relevance_grader.evaluate(
+            query, response="", contexts=context_strings
+        ).get("above_threshold")
 
         if not is_relevant:
             print("[INFO] Fallback to Web Search")
@@ -88,28 +94,40 @@ class ReliableRAG:
         context = "\n".join([n.text for n in enriched_nodes])
 
         # Format answer prompt
-        sources = [f"{n.metadata.get('source_url', 'internal')}" for n in enriched_nodes]
+        sources = [
+            f"{n.metadata.get('source_url', 'internal')}" for n in enriched_nodes
+        ]
         source_text = "\n".join(sources)
         prompt = PromptTemplate(
             "Use the following knowledge to answer the query.\n"
             "Query: {query}\n\nKnowledge:\n{context}\n\nSources:\n{sources}\n\nAnswer:"
         )
-        formatted_prompt = prompt.format(query=query, context=context, sources=source_text)
+        formatted_prompt = prompt.format(
+            query=query, context=context, sources=source_text
+        )
         answer = self.llm.generate(formatted_prompt, contexts=[])
-        print(f"Step 3: LLM Answer Generated")
+        print("Step 3: LLM Answer Generated")
 
         # Step 4: Hallucination Grading
-        hallucination_result = self.hallucination_grader.evaluate(query, response=answer, contexts=[n.text for n in enriched_nodes])
-        print(f"Step 4: Hallucination Detected: {hallucination_result.get('hallucination_detected')}")
+        hallucination_result = self.hallucination_grader.evaluate(
+            query, response=answer, contexts=[n.text for n in enriched_nodes]
+        )
+        print(
+            f"Step 4: Hallucination Detected: {hallucination_result.get('hallucination_detected')}"
+        )
         print("Verdict:", hallucination_result.get("verdict"))
 
         # Step 5: Segment Attribution
-        attribution = self.segment_attributor.locate_segments(query, answer, enriched_nodes)
+        attribution = self.segment_attributor.locate_segments(
+            query, answer, enriched_nodes
+        )
 
         print("\n=== FINAL OUTPUT ===")
         return answer
 
-    def ingest_documents(self, documents: List[str], metadata: Optional[List[dict]] = None) -> None:
+    def ingest_documents(
+        self, documents: List[str], metadata: Optional[List[dict]] = None
+    ) -> None:
         print("[INFO] Indexing documents...")
         embeddings = self.embeddor.embed(documents)
         self.indexer.index(embeddings, documents, metadata)
