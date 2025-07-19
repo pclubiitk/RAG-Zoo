@@ -2,6 +2,8 @@ from .default import DefaultRetriever
 from typing import List, Dict, Any
 import torch
 from transformers import AutoModelForSequenceClassification, AutoTokenizer
+import asyncio
+from concurrent.futures import ThreadPoolExecutor
 
 class ReRankingRetriever(DefaultRetriever):
     '''
@@ -19,6 +21,11 @@ class ReRankingRetriever(DefaultRetriever):
         self.reranker_tokenizer = AutoTokenizer.from_pretrained(reranker_model_name)
         self.reranker_model =  AutoModelForSequenceClassification.from_pretrained(reranker_model_name)
         self.reranker_model.eval()
+        self.executor = ThreadPoolExecutor(max_workers=4)
+        
+    async def async_rerank(self, query: str, docs: List[Dict[str, Any]], k: int = 5) -> List[Dict[str, Any]]:
+        loop = asyncio.get_running_loop()
+        return await loop.run_in_executor(self.executor, self.rerank, query, docs, k)
         
     def rerank(self, query: str, docs:List[Dict[str, Any]], k:int =5) -> List[Dict[str, Any]]:
         '''
@@ -41,9 +48,9 @@ class ReRankingRetriever(DefaultRetriever):
         
         return reranked_docs
     
-    def retrieve(self, query:str, k:int =5) -> List[Dict[str, Any]]:
+    async def retrieve(self, query:str, k:int =5) -> List[Dict[str, Any]]:
         '''
         Retrieves initial documents and then reranks them.
         '''
         initial_docs = super().retrieve(query=query)
-        return self.rerank(query, initial_docs, k)
+        return await self.async_rerank(query, initial_docs, k)

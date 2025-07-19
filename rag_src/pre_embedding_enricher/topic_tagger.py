@@ -2,6 +2,7 @@
 
 from rag_src.pre_embedding_enricher.base  import PreBaseEnricher
 from typing import List
+import asyncio
 
 class TopicTagger(PreBaseEnricher):
     """
@@ -11,14 +12,16 @@ class TopicTagger(PreBaseEnricher):
     def __init__(self, llm):
         self.llm = llm
 
-    def enrich(self, docs: List[str]) -> List[str]:
-        tagged_docs = []
-        for doc in docs:
+    async def enrich(self, docs: List[str]) -> List[str]:
+        async def tag_document(doc: str) -> str:
             prompt = f"Classify the main topic of the following document:\n\n{doc}"
             try:
-                topic = self.llm.generate(prompt).strip().title()
-            except:
+                topic = await self.llm.generate(prompt)
+                topic = topic.strip().title()
+            except Exception:
                 topic = "General"
-            tagged_doc = f"[Topic: {topic}]\n\n{doc}"
-            tagged_docs.append(tagged_doc)
+            return f"[Topic: {topic}]\n\n{doc}"
+
+        # Run all tagging tasks concurrently
+        tagged_docs = await asyncio.gather(*(tag_document(doc) for doc in docs))
         return tagged_docs

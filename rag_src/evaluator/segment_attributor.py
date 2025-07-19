@@ -4,6 +4,7 @@ from typing import List, Dict, Any
 from rag_src.evaluator.base import BaseEvaluator
 from llama_index.core.schema import TextNode
 from llama_index.core.prompts import PromptTemplate
+import asyncio
 
 
 class SegmentAttributor(BaseEvaluator):
@@ -14,7 +15,7 @@ class SegmentAttributor(BaseEvaluator):
     def __init__(self, llm):
         self.llm = llm
 
-    def locate_segments(
+    async def locate_segments(
         self,
         query: str,
         response: str,
@@ -42,17 +43,20 @@ class SegmentAttributor(BaseEvaluator):
             documents=format_docs(docs),
         )
 
-        output = self.llm.generate(prompt, contexts=[])
+        if asyncio.iscoroutinefunction(self.llm.generate):
+            output = await self.llm.generate(prompt, contexts=[])
+        else:
+            output = await asyncio.to_thread(self.llm.generate, prompt, contexts=[])
         return {"segments": output}
 
     # Optional: Make it compatible with BaseEvaluator
-    def evaluate(
+    async def evaluate(
         self,
         query: str,
         response: str,
         contexts: List[str]
     ) -> Dict[str, Any]:
-        return self.locate_segments(
+        return await self.locate_segments(
             query=query,
             response=response,
             docs=[TextNode(text=c) for c in contexts]

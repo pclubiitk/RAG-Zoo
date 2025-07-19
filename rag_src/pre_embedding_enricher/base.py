@@ -9,7 +9,7 @@ class PreBaseEnricher(ABC):
     """
 
     @abstractmethod
-    def enrich(self, docs: List[str]) -> List[str]:
+    async def enrich(self, docs: List[str]) -> List[str]:
         """
         Enriches the input documents with additional context or structure.
 

@@ -1,5 +1,6 @@
 from typing import List, Optional
 import os
+import asyncio
 from rag_src.llm import BaseLLM, DefaultLLM
 from rag_src.retriever import BaseRetriever, DefaultRetriever
 from rag_src.embedder import BaseEmbedder, DefaultEmbedder
@@ -51,7 +52,7 @@ class AdaptiveRAG:
         index_file = os.path.join(index_path, "index.faiss")
         if not os.path.exists(index_file):
             print("[INFO] FAISS index not found. Running ingestion.")
-            self.load_and_ingest_documents()
+            asyncio.create_task(self.load_and_ingest_documents_async())
             
         self.retriever = retriever or DefaultRetriever(index_path=index_path)
     
@@ -175,3 +176,4 @@ class AdaptiveRAG:
         if self.chunker:
             documents = self.chunker.chunk(documents)
         self.ingest_documents(documents)
+3

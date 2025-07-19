@@ -10,7 +10,7 @@ from rag_src.indexer import BaseIndexer, DefaultIndexer
 from rag_src.doc_loader import BaseDocLoader, DefaultDocLoader
 from rag_src.doc_preprocessor import BasePreprocessor, DefaultPreprocessor
 from rag_src.chunker import BaseChunker, DefaultChunker
-
+import asyncio
 
 class RunRAG:
     """
@@ -95,7 +95,18 @@ class RunRAG:
         self.indexer.persist()
         print("[INFO] Index persisted.")
 
-    def run(self, query: str) -> str:
+    async def _retrieve_and_generate(self, query: str, idx: int) -> str:
+        print(f"Retrieving context for query {idx+1} : {query} ")
+        context_docs = await asyncio.to_thread(self.retriever.retrieve, query)
+        print(f"[Query {idx + 1}] Retrieved {len(context_docs)} docs")
+
+        context_texts = [doc.get("text", "") for doc in context_docs if doc.get("text", "").strip()]
+
+        print(f"[Query {idx + 1}] Generating response...")
+        answer = await asyncio.to_thread(self.llm.generate, query=query, contexts=context_texts)
+        return str(answer)
+    
+    async def run(self, query: str) -> str:
         print("=== RUNNING FULL RAG PIPELINE ===")
 
         # Step 1: Load, Preprocess, Chunk
@@ -113,15 +124,17 @@ class RunRAG:
         print(f"Transformed queries: {queries}")
 
         # Step 5: Retrieve + Generate
-        answers = []
-        for i, q in enumerate(queries):
-            print(f"Retrieving context for query {i + 1}: {q}")
-            context_docs = self.retriever.retrieve(q)
-            print(f"Retrieved {len(context_docs)} docs")
+        # answers = []
+        # for i, q in enumerate(queries):
+        #     print(f"Retrieving context for query {i + 1}: {q}")
+        #     context_docs = self.retriever.retrieve(q)
+        #     print(f"Retrieved {len(context_docs)} docs")
 
-            context_text = [doc.get("text", "") for doc in context_docs if doc.get("text", "").strip()]
-            final_answer = self.llm.generate(query=q, contexts=context_text)
-            answers.append(str(final_answer))
+        #     context_text = [doc.get("text", "") for doc in context_docs if doc.get("text", "").strip()]
+        #     final_answer = self.llm.generate(query=q, contexts=context_text)
+        #     answers.append(str(final_answer))
+        
+        answers = await asyncio.gather(*[self._retrieve_and_generate(q, i) for i, q in enumerate(queries)])
 
         print("=== PIPELINE COMPLETE ===")
         return "\n\n".join(answers)

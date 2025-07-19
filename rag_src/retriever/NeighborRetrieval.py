@@ -19,7 +19,7 @@ class NeighborhoodContextRetriever(BaseRetriever):
         self.num_neighbors = num_neighbors
         self.chunk_overlap = chunk_overlap
 
-    def retrieve(self, query: str) -> List[Dict[str, Any]]:
+    async def retrieve(self, query: str) -> List[Dict[str, Any]]:
         top_chunks = self.base_retriever.retrieve(query)  # underlying semantic/keyword retrieval
         results = []
 

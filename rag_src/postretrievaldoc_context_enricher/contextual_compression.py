@@ -76,4 +76,4 @@ class ContextualCompression(BasePostRetrievalContextEnricher):
 
       query = "What is the main topic of the document?"
       result = qa_chain.invoke({"query": query})
-      return(result["source_documents"]))
+      return(result["source_documents"])

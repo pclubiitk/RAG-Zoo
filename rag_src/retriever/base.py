@@ -10,7 +10,7 @@ class BaseRetriever(ABC):
         self.top_k = top_k
 
     @abstractmethod
-    def retrieve(self, query: str) -> List[Dict[str, Any]]:
+    async def retrieve(self, query: str) -> List[Dict[str, Any]]:
         """
         Retrieves top-k relevant documents for the given query.
 

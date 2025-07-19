@@ -6,5 +6,5 @@ class PostDefaultEnricher(PostBaseEnricher):
     Default context enricher that performs no enrichment.
     Acts as a passthrough for documents.
     """
-    def enrich(self, docs: List[str]) -> List[str]:
+    async def enrich(self, docs: List[str]) -> List[str]:
         return docs

@@ -33,7 +33,7 @@ class DefaultRetriever(BaseRetriever):
             self.documents = data["documents"]
             self.metadata = data["metadata"]
 
-    def retrieve(self, query: str) -> List[Dict[str, Any]]:
+    async def retrieve(self, query: str) -> List[Dict[str, Any]]:
         # Encode the query
         query_vec = self.model.encode([query]).astype("float32")
 

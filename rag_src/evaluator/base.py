@@ -9,7 +9,7 @@ class BaseEvaluator(ABC):
     """
 
     @abstractmethod
-    def evaluate(
+    async def evaluate(
         self,
         query: str,
         response: str,

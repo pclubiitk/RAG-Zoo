@@ -2,6 +2,7 @@
 from rag_src.post_retrival_enricher.base import PostBaseEnricher
 from typing import List
 import numpy as np
+import asyncio
 
 class SemanticFilter(PostBaseEnricher):
     """
@@ -24,14 +25,16 @@ class SemanticFilter(PostBaseEnricher):
         v1, v2 = np.array(v1), np.array(v2)
         return np.dot(v1, v2) / (np.linalg.norm(v1) * np.linalg.norm(v2))
 
-    def enrich(self, docs: List[str]) -> List[str]:
-        filtered_docs = []
-        for doc in docs:
+    async def enrich(self, docs: List[str]) -> List[str]:
+        async def score_doc(doc):
             try:
-                doc_emb = self.embedder.embed(doc)
-                score = self.cosine_sim(doc_emb, self.query_embedding)
+                doc_emb = await asyncio.to_thread(self.embedder.embed, [doc])
+                score = self.cosine_sim(doc_emb[0], self.query_embedding)
                 if score >= self.threshold:
-                    filtered_docs.append(doc)
+                    return doc
             except:
-                filtered_docs.append(doc)  # fallback: keep doc if error
-        return filtered_docs
+                return doc  # fallback
+            return None
+
+        results = await asyncio.gather(*[score_doc(doc) for doc in docs])
+        return [doc for doc in results if doc]

@@ -12,7 +12,7 @@ class MetadataInjector(PreBaseEnricher):
     def __init__(self, metadata: dict):
         self.metadata = metadata
 
-    def enrich(self, docs: List[str]) -> List[str]:
+    async def enrich(self, docs: List[str]) -> List[str]:
         enriched_docs = []
         for i, doc in enumerate(docs):
             meta = self.metadata.get(i, "")

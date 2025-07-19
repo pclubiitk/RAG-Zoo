@@ -7,7 +7,7 @@ from rag_src.doc_loader.universal_doc_loader import UniversalDocLoader
 from rag_src.llm import GroqLLM
 load_dotenv()
 @pytest.mark.skipif(
-    not os.path.exists(r"C:\Users\DELL\Downloads\final_draft.pdf"),
+    not os.path.exists(r"C:\Users\harsh\Downloads\final_draft.pdf"),
     reason="PDF document missing for test",
 )
 def test_reliable_rag_groq_response():
