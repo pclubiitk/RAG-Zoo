@@ -369,7 +369,7 @@ for doc in reranked_docs:
 
 ### Generation
 
-The final stage where the LLM uses the retrieved documents to generate an answer. We'll see about using the [post_retrieval_enricher](#post_retrieval_enricher) ,  [postretrievaldoc_context_enricher](#postretrievaldoc_context_enricher) and [llm](#llm) modules here.
+The final stage where the LLM uses the retrieved documents to generate an answer. We'll see about using the [post_retrieval_enricher](#post_retrieval_enricher) and [llm](#llm) modules here.
 
 ```python
 from rag_src.post_retrieval_enricher import DocSummarizer
