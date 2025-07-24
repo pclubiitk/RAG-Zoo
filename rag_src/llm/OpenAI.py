@@ -13,3 +13,10 @@ class OpenAILLM(BaseLLM):
 
     async def generate(self, query: str, contexts: List[str]) -> str:
         return await asyncio.to_thread(self._generate_sync, query, contexts)
+
+    async def generate_stream(self, query: str, contexts: List[str]):
+        prompt = "\n\n".join(contexts) + "\n\n" + query
+        resp = await self.llm.astream_complete(prompt)
+        async for chunk in resp:
+            yield chunk.text
+        
