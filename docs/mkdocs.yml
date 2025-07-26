@@ -1,0 +1,129 @@
+site_name: RAG Zoo Documentation
+site_url: https://sitename.example
+theme:
+  name: material
+  font:
+    text: Newsreader
+    code: Fira Mono
+  logo: assets/pclublogo.png
+  favicon: assets/pclublogo.png
+  features:
+    - search.highlight
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.footer
+    - navigation.instant
+    - navigation.indexes
+    - navigation.instant.prefetch
+    - navigation.instant.progress
+    - navigation.tracking
+    - navigation.path
+    - navigation.top
+    - toc.follow
+    - content.code.copy
+    - content.code.select
+    - content.code.annotate
+  palette:
+    - scheme: slate
+      toggle:
+        icon: material/weather-sunny
+        name: Dark mode
+      primary: indigo
+      accent: deep orange
+    - scheme: default
+      toggle:
+        icon: material/weather-night
+        name: Light mode
+      primary: indigo
+      accent: deep orange
+plugins:
+  - search
+markdown_extensions:
+  - attr_list
+  - md_in_html
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+
+extra_css:
+  - stylesheets/extra.css
+
+extra:
+  social:
+    - icon: simple/x
+      link: https://x.com/pclubiitk
+    - icon: simple/youtube
+      link: https://www.youtube.com/@pclubiitk
+    - icon: simple/github
+      link: https://github.com/pclubiitk
+    - icon: simple/instagram
+      link: https://www.instagram.com/pclubiitk/?hl=en
+  search:
+    placeholder: "Search"
+  generator: false
+
+nav:
+  - Home: README.md
+
+  - Architecture:
+      - Architecture/README.md
+      - High Level Layout: Architecture/HighLevelLayout.md
+      - Repository Layout: Architecture/RepositoryLayout.md
+
+  - Learning:
+      - Installation and Basic Set up:
+          - Installation/README.md
+          - Basic Setup: Installation/BasicInstallation.md
+          - Environment Setup: Installation/EnvironmentSetup.md
+
+      - Quick Start:
+          - Quickstart/README.md
+          - Getting Started: Quickstart/GettingStarted.md
+
+      - Component Wise Guides:
+          - Component Wise Guides/README.md
+          - Data Preparation: Component Wise Guides/DataPreparation.md
+          - Embedding and Indexing: Component Wise Guides/EmbeddingAndIndexing.md
+          - Query Transformer: Component Wise Guides/QueryTransformer.md
+          - Retrieval: Component Wise Guides/Retrieval.md
+          - Generation: Component Wise Guides/Generation.md
+          - Evaluation: Component Wise Guides/Evaluation.md
+
+      - Advanced RAG Techniques:
+          - Advanced RAG Techniques/README.md
+          - Adaptive RAG: Advanced RAG Techniques/AdaptiveRAG.md
+          - Corrective RAG (CRAG): Advanced RAG Techniques/CRAG.md
+          - Graph RAG: Advanced RAG Techniques/GraphRAG.md
+          - Reliable RAG: Advanced RAG Techniques/ReliableRAG.md
+
+  - References (Module Deep Dive):
+      - Module-By-Module Deep Dive/README.md
+      - Complete RAG pipeline: Module-By-Module Deep Dive/Complete_RAG_Pipeline.md
+      - Document Loader: Module-By-Module Deep Dive/doc_loader.md
+      - Document Preprocessing: Module-By-Module Deep Dive/doc_preprocessor.md
+      - Query Transformation: Module-By-Module Deep Dive/query_transformer.md
+      - Evaluator: Module-By-Module Deep Dive/evaluator.md
+      - Chunking: Module-By-Module Deep Dive/chunker.md
+      - Embedding: Module-By-Module Deep Dive/embedder.md
+      - Indexer: Module-By-Module Deep Dive/indexer.md
+      - Retriever: Module-By-Module Deep Dive/retriever.md
+      - LLM: Module-By-Module Deep Dive/llm.md
+      - Pre Embedding Enricher: Module-By-Module Deep Dive/pre_embedding_enricher.md
+      - Post Retrieval Enricher: Module-By-Module Deep Dive/post_retrieval_enricher.md
+
+  - How To Contribute: contribute.md
+
+copyright: 2025 &copy; Programming Club | IITK Developed and Maintained by Programming Club IITK

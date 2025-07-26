@@ -1,0 +1,183 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Playfair+Display:wght@700&display=swap");
+
+:root {
+  font-size: 155%;
+  --my-primary-base-rgb: 63, 81, 181;
+  --my-header-opacity: 0.85;
+  --md-primary-fg-color: rgba(
+    var(--my-primary-base-rgb),
+    var(--my-header-opacity)
+  );
+  --md-primary-fg-color--light: rgb(55, 114, 243);
+  --md-primary-fg-color--dark: rgb(57, 109, 240);
+  --md-accent-fg-color: #ff5252;
+  --md-accent-fg-color--light: #ff8a80;
+  --md-accent-fg-color--dark: #d50000;
+  --md-default-bg-color: #fcfcfc;
+  --md-default-fg-color: rgba(0, 0, 0, 0.87);
+  --md-default-fg-color--light: rgba(0, 0, 0, 0.6);
+  --md-default-fg-color--lighter: rgba(0, 0, 0, 0.3);
+  --md-shadow-z1: 0 2px 5px rgba(0, 0, 0, 0.1), 0 0 2px rgba(0, 0, 0, 0.05);
+  --md-shadow-z2: 0 4px 10px rgba(0, 0, 0, 0.15), 0 0 4px rgba(0, 0, 0, 0.08);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --md-primary-fg-color: rgba(144, 164, 237, 1);
+    --md-primary-fg-color--light: rgb(179, 200, 255);
+    --md-primary-fg-color--dark: rgb(92, 107, 192);
+    --md-accent-fg-color: #ff867c;
+    --md-accent-fg-color--light: #ffb3a7;
+    --md-accent-fg-color--dark: #c62828;
+    --md-default-bg-color: #121212;
+    --md-default-fg-color: rgba(255, 255, 255, 0.87);
+    --md-default-fg-color--light: rgba(255, 255, 255, 0.6);
+    --md-default-fg-color--lighter: rgba(255, 255, 255, 0.3);
+    --md-shadow-z1: 0 2px 5px rgba(255, 255, 255, 0.05),
+      0 0 2px rgba(255, 255, 255, 0.02);
+    --md-shadow-z2: 0 4px 10px rgba(255, 255, 255, 0.08),
+      0 0 4px rgba(255, 255, 255, 0.05);
+  }
+}
+
+body {
+  font-family: "Inter", sans-serif;
+  font-size: 1rem;
+}
+h1,
+h2,
+h3 {
+  font-family: "Playfair Display", serif;
+  font-weight: 700;
+  line-height: 1.3;
+}
+h1 {
+  font-size: 2.5rem;
+}
+h2 {
+  font-size: 2.1rem;
+}
+h3 {
+  font-size: 1.7rem;
+}
+
+.md-nav__link {
+  transition: background-color 0.2s ease-in-out !important;
+  border-radius: 4px;
+  padding: 0.6em 0.8em !important;
+}
+.md-nav__link:hover {
+  background-color: rgba(0, 0, 0, 0.03) !important;
+}
+.md-nav__link--active {
+  background-color: rgba(var(--my-primary-base-rgb), 0.1) !important;
+  color: var(--md-primary-fg-color) !important;
+  font-weight: 600 !important;
+}
+
+a {
+  transition: color 0.2s ease-in-out !important;
+}
+a:hover {
+  color: var(--md-accent-fg-color) !important;
+}
+
+.md-typeset pre,
+.md-typeset blockquote,
+.admonition {
+  box-shadow: var(--md-shadow-z1) !important;
+  border: 1px solid rgba(0, 0, 0, 0.05) !important;
+  background-color: #fff !important;
+  transition: box-shadow 0.2s ease-in-out;
+}
+.md-typeset pre:hover,
+.md-typeset blockquote:hover,
+.admonition:hover {
+  box-shadow: var(--md-shadow-z2) !important;
+}
+@media (prefers-color-scheme: dark) {
+  .md-typeset pre,
+  .md-typeset blockquote,
+  .admonition {
+    background-color: #1e1e1e !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+  }
+}
+
+.highlight .hll,
+.highlight pre code .line span {
+  background-color: transparent !important;
+}
+
+.highlighttable td.linenos,
+.highlighttable div.linenos,
+.highlighttable pre {
+  background-color: transparent !important;
+}
+
+.md-typeset__scrollwrap {
+  background-color: transparent !important;
+}
+
+.highlighttable .linenos {
+  background-color: transparent !important;
+  padding-right: 0.5em;
+}
+
+[data-md-color-scheme="default"] .highlighttable .linenos pre {
+  color: #000 !important;
+}
+
+[data-md-color-scheme="slate"] .highlighttable .linenos pre {
+  color: #fff !important;
+}
+
+.md-typeset table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1.5em;
+  font-size: 0.9em;
+  border-radius: 6px;
+  overflow: hidden;
+}
+.md-typeset table th,
+.md-typeset table td {
+  padding: 0.8em 1em;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  text-align: left;
+}
+.md-typeset table th {
+  background-color: rgba(0, 0, 0, 0.05);
+  font-weight: 600;
+  color: var(--md-default-fg-color);
+}
+@media (prefers-color-scheme: dark) {
+  .md-typeset table th {
+    background-color: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+  .md-typeset table td {
+    border-color: rgba(255, 255, 255, 0.05);
+  }
+}
+
+input[data-md-component="search-query"] {
+  height: 1.8em !important;
+  line-height: 1.8em !important;
+  padding-top: 0.1em !important;
+  padding-bottom: 0.1em !important;
+  font-size: 0.9em !important;
+}
+.md-search__input::placeholder {
+  font-size: 0.9em;
+  color: var(--md-default-fg-color--light);
+}
+.md-search__icon {
+  vertical-align: middle;
+}
+.md-header__inner .md-search__form {
+  display: flex;
+  align-items: center;
+  max-width: 250px !important;
+  width: 100%;
+}
