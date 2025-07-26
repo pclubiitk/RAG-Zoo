@@ -2,6 +2,8 @@
 
 We welcome edits and contributions.
 
+New integrations should meaningfully integrate with existing components.
+
 ## What can you contribute to?
 
 1. [Extend core module](#extend-core-module)
@@ -29,3 +31,21 @@ We welcome edits and contributions.
 ## Improve Code Quality and Documentation
 
 - We would love your help to make our modules cleaner and more clearer for everyone to use easily.
+
+---
+
+## Steps to Contribute
+
+1) Fork the repo on your GitHub
+2) Clone it on your local machine
+```bash
+git clone https://github.com/pclubiitk/RAG-Zoo.git
+```
+3) Set up your environment (follow our [Installation Guide](docs/docs/Installation))
+4) Work on your feature, commit and push your changes and open a PR
+
+## Acknowledgements
+
+Thank you VERY MUCH for contributing to RAG-Zoo
+
+Happy Coding and `Sit Vis Vobiscum`!
