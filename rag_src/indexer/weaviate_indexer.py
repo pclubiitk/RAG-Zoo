@@ -15,11 +15,11 @@ class WeaviateIndexer(BaseIndexer):
         weaviate_url: str,
         api_key: Optional[str] = None,
         class_name: str = "DocumentChunk",
-        recreate_schema: bool = True
+        recreate_schema: bool = True,
     ):
         self.client = connect_to_weaviate_cloud(
             cluster_url=weaviate_url,
-            auth_credentials=Auth.api_key(api_key) if api_key else None
+            auth_credentials=Auth.api_key(api_key) if api_key else None,
         )
         self.class_name = class_name
 
@@ -34,7 +34,7 @@ class WeaviateIndexer(BaseIndexer):
                     Property(name="metadata", data_type=DataType.TEXT),
                 ],
                 vectorizer_config=Configure.Vectorizer.none(),
-                vector_index_config=Configure.VectorIndex.hnsw()
+                vector_index_config=Configure.VectorIndex.hnsw(),
             )
 
         self.collection: Collection = self.client.collections.get(self.class_name)
@@ -43,7 +43,7 @@ class WeaviateIndexer(BaseIndexer):
         self,
         embeddings: List[List[float]],
         documents: List[str],
-        metadata: Optional[List[Dict[str, Any]]] = None
+        metadata: Optional[List[Dict[str, Any]]] = None,
     ) -> None:
         objs = []
         for i, (embedding, text) in enumerate(zip(embeddings, documents)):
@@ -51,14 +51,14 @@ class WeaviateIndexer(BaseIndexer):
                 uuid=str(uuid4()),
                 properties={
                     "text": text,
-                    "metadata": str(metadata[i]) if metadata else "{}"
+                    "metadata": str(metadata[i]) if metadata else "{}",
                 },
-                vector=embedding
+                vector=embedding,
             )
             objs.append(obj)
 
         self.collection.data.insert_many(objs)
-        
+
     def reset(self) -> None:
         if self.client.collections.exists(self.class_name):
             self.client.collections.delete(name=self.class_name)
@@ -70,7 +70,7 @@ class WeaviateIndexer(BaseIndexer):
                 Property(name="metadata", data_type=DataType.TEXT),
             ],
             vectorizer_config=Configure.Vectorizer.none(),
-            vector_index_config=Configure.VectorIndex.hnsw()
+            vector_index_config=Configure.VectorIndex.hnsw(),
         )
         self.collection = self.client.collections.get(self.class_name)
 

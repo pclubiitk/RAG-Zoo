@@ -4,8 +4,10 @@ import json
 from pathlib import Path
 from rag_src.doc_loader import UncommonDocLoader
 
+
 def write_file(path: Path, content: str):
     path.write_text(content, encoding="utf-8")
+
 
 def test_load_csv_file():
     with tempfile.TemporaryDirectory() as tmpdir:
@@ -19,6 +21,7 @@ def test_load_csv_file():
         assert "Alice" in result[0]
         assert "Bob" in result[0]
 
+
 def test_load_json_file():
     with tempfile.TemporaryDirectory() as tmpdir:
         tmp_path = Path(tmpdir)
@@ -30,6 +33,7 @@ def test_load_json_file():
 
         assert '"key": "value"' in result[0]
         assert '"list": [' in result[0]
+
 
 def test_load_xml_file():
     with tempfile.TemporaryDirectory() as tmpdir:
@@ -44,6 +48,7 @@ def test_load_xml_file():
         assert "Hello" in result[0]
         assert "World" in result[0]
 
+
 def test_load_rst_file():
     with tempfile.TemporaryDirectory() as tmpdir:
         tmp_path = Path(tmpdir)
@@ -55,6 +60,7 @@ def test_load_rst_file():
         result = loader.load()
 
         assert "reStructuredText" in result[0]
+
 
 def test_load_tex_file():
     with tempfile.TemporaryDirectory() as tmpdir:
@@ -68,10 +74,11 @@ def test_load_tex_file():
 
         assert "LaTeX content" in result[0]
 
+
 @pytest.mark.skipif("ebooklib" not in globals(), reason="ebooklib not installed")
 def test_load_epub_file():
-    import ebooklib
     from ebooklib import epub
+
     with tempfile.TemporaryDirectory() as tmpdir:
         tmp_path = Path(tmpdir)
         file = tmp_path / "book.epub"

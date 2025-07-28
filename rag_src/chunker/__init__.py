@@ -9,5 +9,5 @@ __all__ = [
     "DefaultChunker",
     "RecursiveChunker",
     "SemanticChunker",
-    "TokenChunker"
+    "TokenChunker",
 ]

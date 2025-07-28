@@ -2,7 +2,9 @@ import os
 import pytest
 from rag_src.embedder import GeminiEmbedder
 from dotenv import load_dotenv
+
 load_dotenv()
+
 
 @pytest.fixture
 def api_key():
@@ -20,7 +22,7 @@ def embedder(api_key):
 def test_embedding_returns_vectors(embedder):
     texts = ["Gemini is powerful.", "Embeddings are fun."]
     embeddings = embedder.embed(texts)
-    
+
     assert isinstance(embeddings, list)
     assert len(embeddings) == len(texts)
     assert all(isinstance(vec, list) for vec in embeddings)

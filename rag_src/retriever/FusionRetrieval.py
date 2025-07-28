@@ -1,19 +1,15 @@
 from typing import List, Dict, Any
-from collections import defaultdict
-import heapq
 from .base import BaseRetriever
-import pickle
-import numpy as np
-from sentence_transformers import SentenceTransformer
-import os
 from llama_index.llms.ollama import Ollama
+
 
 class FusionRetriever(BaseRetriever):
     def __init__(self, retriever: BaseRetriever, top_k: int = 5):
         super().__init__(top_k)
         self.retriever = retriever
-        self.llm = Ollama(model = 'mistral')
+        self.llm = Ollama(model="mistral")
         self.n_expansions = 3
+
     def expand_query(self, query: str) -> List[str]:
         prompt = f"""Rephrase the following search query in {self.n_expansions} different but semantically equivalent ways.
 Each rephrasing should preserve the meaning but vary the wording and structure.
@@ -32,8 +28,7 @@ List {self.n_expansions} variations, each on a new line.
             if line and line.lower() != query.lower():
                 variants.append(line)
 
-        return list(set(variants))[:self.n_expansions + 1]
-        
+        return list(set(variants))[: self.n_expansions + 1]
 
     async def retrieve(self, query: str) -> List[Dict[str, Any]]:
         variants = self.expand_query(query)
@@ -53,4 +48,6 @@ List {self.n_expansions} variations, each on a new line.
             else:
                 fused[key]["score"] += r["score"]
 
-        return sorted(fused.values(), key=lambda x: x["score"], reverse=True)[:self.top_k]
+        return sorted(fused.values(), key=lambda x: x["score"], reverse=True)[
+            : self.top_k
+        ]

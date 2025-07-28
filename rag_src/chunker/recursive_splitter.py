@@ -15,15 +15,12 @@ class RecursiveChunker(BaseChunker):
     def __init__(self, chunk_size: int = 512, chunk_overlap: int = 50):
         super().__init__(chunk_size, chunk_overlap)
         self.text_splitter = RecursiveCharacterTextSplitter(
-            chunk_size=self.chunk_size,
-            chunk_overlap=self.chunk_overlap
+            chunk_size=self.chunk_size, chunk_overlap=self.chunk_overlap
         )
         self.parser = LangchainNodeParser(self.text_splitter)
 
     def chunk(
-        self,
-        docs: List[str],
-        metadata: Optional[List[Dict[str, str]]] = None
+        self, docs: List[str], metadata: Optional[List[Dict[str, str]]] = None
     ) -> List[str]:
 
         # Prepare documents for LlamaIndex

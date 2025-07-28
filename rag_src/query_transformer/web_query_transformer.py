@@ -2,6 +2,7 @@ from typing import List
 from rag_src.llm import BaseLLM
 from rag_src.query_transformer.base import BaseQueryTransformer
 
+
 class LLMWebQueryTransformer(BaseQueryTransformer):
     """
     Transforms a user query into a more web-search-optimized version using an LLM.

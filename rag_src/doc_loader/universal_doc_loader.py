@@ -3,7 +3,6 @@ from pathlib import Path
 from bs4 import BeautifulSoup
 import fitz  # PyMuPDF
 import docx
-import os
 
 from rag_src.doc_loader import BaseDocLoader  # Adjust import based on your structure
 

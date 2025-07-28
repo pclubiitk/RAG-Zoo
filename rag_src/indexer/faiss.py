@@ -5,10 +5,12 @@ import os
 from typing import List, Dict, Any, Optional
 import numpy as np
 
+
 class DefaultIndexer(BaseIndexer):
     """
     Default indexer using FAISS (Flat L2 index) and Pickle for metadata/doc persistence.
     """
+
     def __init__(self, persist_path: str = "default_index"):
         self.persist_path = persist_path
         self.faiss_index = None  # ✅ renamed to avoid method conflict
@@ -19,7 +21,7 @@ class DefaultIndexer(BaseIndexer):
         self,
         embeddings: List[List[float]],
         documents: List[str],
-        metadata: Optional[List[Dict[str, Any]]] = None
+        metadata: Optional[List[Dict[str, Any]]] = None,
     ) -> None:
         embeddings_np = np.array(embeddings).astype("float32")
 
@@ -43,13 +45,12 @@ class DefaultIndexer(BaseIndexer):
         os.makedirs(self.persist_path, exist_ok=True)
 
         # Save FAISS index
-        faiss.write_index(self.faiss_index, os.path.join(self.persist_path, "index.faiss"))
+        faiss.write_index(
+            self.faiss_index, os.path.join(self.persist_path, "index.faiss")
+        )
 
         # Save documents and metadata
         with open(os.path.join(self.persist_path, "data.pkl"), "wb") as f:
-            pickle.dump({
-                "documents": self.documents,
-                "metadata": self.metadata
-            }, f)
+            pickle.dump({"documents": self.documents, "metadata": self.metadata}, f)
 
         print(f"[INFO] Saving FAISS index to {self.persist_path}/index.faiss")

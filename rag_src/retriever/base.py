@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import List, Dict, Any
 
+
 class BaseRetriever(ABC):
     """
     Abstract base class for retrieving relevant chunks from a vector index based on a query.

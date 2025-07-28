@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import List, Union
 
+
 class BaseLLM(ABC):
     """
     Abstract base class for async LLM interaction in a RAG system.

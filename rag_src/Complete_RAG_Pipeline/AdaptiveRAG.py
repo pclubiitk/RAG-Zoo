@@ -5,7 +5,7 @@ from rag_src.llm import BaseLLM, DefaultLLM
 from rag_src.retriever import BaseRetriever, DefaultRetriever
 from rag_src.embedder import BaseEmbedder, DefaultEmbedder
 from rag_src.query_transformer import QueryDecomposer
-from rag_src.post_retrival_enricher import PostBaseEnricher,PostDefaultEnricher
+from rag_src.post_retrival_enricher import PostBaseEnricher, PostDefaultEnricher
 from rag_src.indexer import BaseIndexer, DefaultIndexer
 from rag_src.doc_loader import BaseDocLoader, DefaultDocLoader
 from rag_src.doc_preprocessor import BasePreprocessor, DefaultPreprocessor
@@ -17,16 +17,21 @@ from pydantic import BaseModel, Field
 import asyncio
 from typing import AsyncGenerator
 
+
 class SelectedIndices(BaseModel):
     indices: List[int] = Field(
         description="Indices of selected documents",
         json_schema_extra={"example": [0, 1, 2, 3]},
     )
+
+
 class CategoriesOptions(BaseModel):
     category: str = Field(
         description="The category of the query, the options are: Factual, Analytical, Opinion, or Contextual",
         json_schema_extra={"example": "Factual"},
     )
+
+
 class AdaptiveRAG:
     def __init__(
         self,
@@ -120,16 +125,18 @@ class AdaptiveRAG:
     # Factual queries: enhance the query for better retrieval
     async def factual_retrieve(self, query):
         print("retrieving factual")
-        enhanced_query_prompt = PromptTemplate("Enhance this factual query for better information retrieval: {query}")
+        enhanced_query_prompt = PromptTemplate(
+            "Enhance this factual query for better information retrieval: {query}"
+        )
         formatted_prompt = enhanced_query_prompt.format(query=query)
         enhanced_query = await self.llm.generate(formatted_prompt,contexts=[])
         docs = await self.retriever.retrieve(enhanced_query)
         return docs
-    
+
     # Analytical queries: decompose into sub-questions, then rerank for diversity
     async def analytical_retrieve(self, query, k=4):
         print("retrieving analytical")
-        self.query_transform=QueryDecomposer(llm=self.llm.llm)
+        self.query_transform = QueryDecomposer(llm=self.llm.llm)
         sub_questions: list[str] = self.query_transform.transform(query=query)
         all_docs = []
         retrieve_tasks = [asyncio.create_task(self.retriever.retrieve(sq)) for sq in sub_questions]
@@ -138,17 +145,20 @@ class AdaptiveRAG:
             all_docs.extend(result)
             
         diversity_prompt = PromptTemplate(
-                template= """Select the most diverse and relevant set of {k} documents for the query: '{query}'\nDocuments: {docs}\n.Return only the indices of selected documents as a list of integers.
+            template="""Select the most diverse and relevant set of {k} documents for the query: '{query}'\nDocuments: {docs}\n.Return only the indices of selected documents as a list of integers.
                 Return ONLY a JSON object in the following format:
                 { "indices": [0, 1, 2, 3] }"""
-            )
-        diversity_program = LLMTextCompletionProgram.from_defaults(
-            output_cls=SelectedIndices,
-            llm=self.llm.llm, 
-            prompt=diversity_prompt
         )
-        docs_text = "\n".join([f"<doc{i+1}>:\n{doc.get("text","")[:100]}\n</doc{i+1}>" for i, doc in enumerate(all_docs)])
-        result=diversity_program(query=query,docs=docs_text,k=k)
+        diversity_program = LLMTextCompletionProgram.from_defaults(
+            output_cls=SelectedIndices, llm=self.llm.llm, prompt=diversity_prompt
+        )
+        docs_text = "\n".join(
+            [
+                f"<doc{i+1}>:\n{doc.get("text","")[:100]}\n</doc{i+1}>"
+                for i, doc in enumerate(all_docs)
+            ]
+        )
+        result = diversity_program(query=query, docs=docs_text, k=k)
         selected_indices_result = result.indices
         return [all_docs[i] for i in selected_indices_result if i < len(all_docs)]
 
@@ -168,14 +178,17 @@ class AdaptiveRAG:
                 { "indices": [0, 1, 2, 3] }"""
         )
         opinion_program = LLMTextCompletionProgram.from_defaults(
-            output_cls=SelectedIndices,
-            llm=self.llm.llm, 
-            prompt=opinion_prompt
+            output_cls=SelectedIndices, llm=self.llm.llm, prompt=opinion_prompt
         )
-        docs_text = "\n".join([f"<doc{i+1}>:\n{doc.get("text","")[:100]}\n</doc{i+1}>" for i, doc in enumerate(all_docs)])
-        result=opinion_program(query=query,docs=docs_text,k=k)
-        selected_indices=result.indices
-        print(f'selected diverse and relevant documents')
+        docs_text = "\n".join(
+            [
+                f"<doc{i+1}>:\n{doc.get("text","")[:100]}\n</doc{i+1}>"
+                for i, doc in enumerate(all_docs)
+            ]
+        )
+        result = opinion_program(query=query, docs=docs_text, k=k)
+        selected_indices = result.indices
+        print("selected diverse and relevant documents")
         return [all_docs[i] for i in selected_indices if i < len(all_docs)]
 
     # Contextual queries: include user context in reformulating the query
@@ -204,20 +217,20 @@ class AdaptiveRAG:
         )
         program = LLMTextCompletionProgram.from_defaults(
             output_cls=CategoriesOptions,
-            llm=self.llm.llm, 
-            prompt=query_classifier_prompt
+            llm=self.llm.llm,
+            prompt=query_classifier_prompt,
         )
         result = program(query=query)
         print(f"Classifying query...  {result.category}")
-        
-        #Use the appropriate retrieval strategy
+
+        # Use the appropriate retrieval strategy
         self.strategies = {
             "Factual": self.factual_retrieve,
             "Analytical": self.analytical_retrieve,
             "Opinion": self.opinion_retrieve,
-            "Contextual": self.context_retrieve
+            "Contextual": self.context_retrieve,
         }
-        
+
         strategy = self.strategies[result.category]
         docs = await strategy(query)
         

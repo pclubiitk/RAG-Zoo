@@ -32,13 +32,13 @@ class SmartLLM(BaseLLM, LLM):
 
     def _init_llm(self):
         # Prioritized environment variable-based selection
-        if (key := os.getenv("GEMINI_API_KEY")):
+        if key := os.getenv("GEMINI_API_KEY"):
             print("[SmartLLM] Using Gemini LLM")
             return GeminiLLM(key)
-        elif (key := os.getenv("GROQ_API_KEY")):
+        elif key := os.getenv("GROQ_API_KEY"):
             print("[SmartLLM] Using Groq LLM")
             return GroqLLM(key)
-        elif (key := os.getenv("OPENAI_API_KEY")):
+        elif key := os.getenv("OPENAI_API_KEY"):
             print("[SmartLLM] Using OpenAI LLM")
             return OpenAILLM(key)
         else:
@@ -72,13 +72,17 @@ class SmartLLM(BaseLLM, LLM):
     async def acomplete(self, prompt: str, **kwargs) -> CompletionResponse:
         raise NotImplementedError("SmartLLM does not support acomplete().")
 
-    async def astream_complete(self, prompt: str, **kwargs) -> AsyncGenerator[CompletionResponse, None]:
+    async def astream_complete(
+        self, prompt: str, **kwargs
+    ) -> AsyncGenerator[CompletionResponse, None]:
         raise NotImplementedError("SmartLLM does not support astream_complete().")
 
     async def achat(self, messages: List[ChatMessage], **kwargs) -> ChatResponse:
         raise NotImplementedError("SmartLLM does not support achat().")
 
-    async def astream_chat(self, messages: List[ChatMessage], **kwargs) -> AsyncGenerator[ChatResponse, None]:
+    async def astream_chat(
+        self, messages: List[ChatMessage], **kwargs
+    ) -> AsyncGenerator[ChatResponse, None]:
         raise NotImplementedError("SmartLLM does not support astream_chat().")
 
     @property
@@ -88,9 +92,7 @@ class SmartLLM(BaseLLM, LLM):
             num_output=512,
             is_chat_model=False,
             is_function_calling_model=False,
-            model_name="SmartLLM"
+            model_name="SmartLLM",
         )
 
-    model_config = {
-        "extra": "allow"
-    }
+    model_config = {"extra": "allow"}

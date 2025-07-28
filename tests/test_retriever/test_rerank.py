@@ -2,6 +2,7 @@ import torch
 import numpy as np
 from unittest.mock import patch, MagicMock, mock_open
 
+
 @patch("rag_src.retriever.default.pickle.load")
 @patch("rag_src.retriever.default.faiss.read_index")
 @patch("rag_src.retriever.default.os.path.exists", return_value=True)
@@ -43,7 +44,7 @@ def test_reranking_retriever(
     mock_faiss_index = MagicMock()
     mock_faiss_index.search.return_value = (
         np.array([[0.1, 0.2]]),  # distances
-        np.array([[0, 1]])       # indices
+        np.array([[0, 1]]),  # indices
     )
     mock_faiss_read_index.return_value = mock_faiss_index
 
@@ -55,6 +56,7 @@ def test_reranking_retriever(
 
     # Instantiate retriever and test
     from rag_src.retriever.rerank import ReRankingRetriever
+
     retriever = ReRankingRetriever(index_path="dummy_index")
     results = retriever.retrieve("sample query", k=2)
 

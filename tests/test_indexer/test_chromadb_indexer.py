@@ -1,5 +1,4 @@
 import os
-import shutil
 import pytest
 import numpy as np
 from rag_src.indexer import ChromaDBIndexer
@@ -17,8 +16,7 @@ def dummy_data():
 def chroma_indexer(tmp_path_factory):
     tmp_dir = tmp_path_factory.mktemp("chroma_index")
     return ChromaDBIndexer(
-        collection_name="test_collection",
-        persist_directory=str(tmp_dir)
+        collection_name="test_collection", persist_directory=str(tmp_dir)
     )
 
 
@@ -27,8 +25,10 @@ def test_indexing_and_retrieval(chroma_indexer, dummy_data):
     chroma_indexer.index(embeddings, documents, metadata)
 
     # Query all documents
-    results = chroma_indexer.collection.get(include=["documents", "embeddings", "metadatas"])
-    
+    results = chroma_indexer.collection.get(
+        include=["documents", "embeddings", "metadatas"]
+    )
+
     assert len(results["documents"]) == 3
     assert results["documents"][0] == "Document one"
     assert results["metadatas"][1]["source"] == "test2"
@@ -51,4 +51,3 @@ def test_persist(chroma_indexer, dummy_data):
 
     # Check that persistence directory has been created
     assert os.path.exists(chroma_indexer.persist_directory)
-

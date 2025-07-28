@@ -1,11 +1,13 @@
 import pytest
 from rag_src.pre_embedding_enricher.topic_tagger import TopicTagger
 
+
 class MockLLM:
     def generate(self, prompt):
         if "error" in prompt:
             raise ValueError("Simulated failure")
         return "technology"
+
 
 def test_topic_tagger_basic_tagging():
     docs = ["AI is transforming the world."]
@@ -17,6 +19,7 @@ def test_topic_tagger_basic_tagging():
     assert "AI is transforming the world." in enriched[0]
     assert isinstance(enriched[0], str)
 
+
 def test_topic_tagger_multiple_docs():
     docs = ["Doc 1 about space.", "Doc 2 about biology."]
     enricher = TopicTagger(llm=MockLLM())
@@ -24,6 +27,7 @@ def test_topic_tagger_multiple_docs():
 
     assert len(enriched) == 2
     assert all(doc.startswith("[Topic: Technology]") for doc in enriched)
+
 
 def test_topic_tagger_handles_failure():
     class FailingLLM:
@@ -37,13 +41,18 @@ def test_topic_tagger_handles_failure():
     assert enriched[0].startswith("[Topic: General]")
     assert "Should fallback to General topic" in enriched[0]
 
+
 def test_topic_tagger_with_llamaindex_mockllm():
     try:
         from llama_index.core.llms.mock import MockLLM as LlamaMockLLM
     except ImportError:
         pytest.skip("llama-index-core not installed")
 
-    llama_llm = LlamaMockLLM(response="finance")
+    class CustomMockLLM(LlamaMockLLM):
+        def generate(self, prompt, **kwargs):
+            return "finance"
+
+    llama_llm = CustomMockLLM()
     enricher = TopicTagger(llm=llama_llm)
     docs = ["Stock markets fluctuate due to investor behavior."]
     enriched = enricher.enrich(docs)

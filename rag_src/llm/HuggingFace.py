@@ -3,6 +3,7 @@ from llama_index.llms.huggingface import HuggingFaceLLM
 from .base import BaseLLM
 import asyncio
 
+
 class HuggingFaceLLMWrapper(BaseLLM):
     def __init__(self, model_name: str = "HuggingFaceH4/zephyr-7b-alpha"):
         self.llm = HuggingFaceLLM(model_name=model_name)

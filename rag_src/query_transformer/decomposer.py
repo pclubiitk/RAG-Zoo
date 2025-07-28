@@ -14,5 +14,3 @@ class QueryDecomposer(BaseQueryTransformer):
             return [sq.query_str for sq in bundles.subquestions]
         else:
             return [bundles.query_str]
-    
-

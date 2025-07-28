@@ -5,6 +5,7 @@ from typing import List
 import os
 import asyncio
 
+
 class SerpAPIWebRetriever(BaseWebRetriever):
     def __init__(self, api_key: str = None, max_results: int = 5):
         self.api_key = api_key or os.getenv("SERPAPI_API_KEY")
@@ -19,7 +20,7 @@ class SerpAPIWebRetriever(BaseWebRetriever):
                 "q": query,
                 "api_key": self.api_key,
                 "engine": "google",
-                "num": self.max_results
+                "num": self.max_results,
             }
 
             search = GoogleSearch(params)
@@ -34,7 +35,9 @@ class SerpAPIWebRetriever(BaseWebRetriever):
 
                 if snippet:
                     content = f"{title}\n{snippet}"
-                    web_nodes.append(TextNode(text=content, metadata={"source_url": url}))
+                    web_nodes.append(
+                        TextNode(text=content, metadata={"source_url": url})
+                    )
 
             print(f"[SERPAPI] Retrieved {len(web_nodes)} results.")
             return web_nodes

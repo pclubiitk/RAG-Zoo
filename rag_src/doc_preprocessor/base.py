@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import List
 
+
 class BasePreprocessor(ABC):
     """
     Abstract base class for preprocessing raw documents.

@@ -3,6 +3,7 @@ from llama_index.llms.groq import Groq
 import asyncio
 from .base import BaseLLM
 
+
 class GroqLLM(BaseLLM):
     def __init__(self, api_key: str = None, model: str = "llama3-8b-8192"):
         self.llm = Groq(model=model, api_key=api_key)
