@@ -1,27 +1,45 @@
-from unittest.mock import patch, MagicMock
+import os
+import time
+from dotenv import load_dotenv
+from rag_src.llm import GroqLLM
+from rag_src.Complete_RAG_Pipeline.CRAG import CRAG
+from rag_src.doc_loader.universal_doc_loader import UniversalDocLoader
 
+load_dotenv()
+GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 
-# Mock the CRAG and GroqLLM components
-@patch("rag_src.Complete_RAG_Pipeline.CRAG")
-@patch("rag_src.llm.GroqLLM")
-def test_crag_response(mock_groqllm, mock_crag_class):
-    # Create a mock CRAG instance with a fake .run() method
-    mock_crag_instance = MagicMock()
-    mock_crag_instance.run.return_value = "A fictional artist wrote the song."
+docdir=r"C:\Users\harsh\Downloads\final_draft.pdf"
+crag = CRAG(
+    llm=GroqLLM(api_key=GROQ_API_KEY),
+    docdir=r"C:\Users\harsh\Downloads\final_draft.pdf",
+    doc_loader=UniversalDocLoader(docdir)
+)
 
-    # Replace the class return value with our mock instance
-    mock_crag_class.return_value = mock_crag_instance
+async def run_crag_query(query: str) -> str:
+    final_answer = []
+    async for token in crag.run(query):
+        final_answer.append(token)
+        print(token, end="", flush=True)
 
-    # Optional: also mock GroqLLM (if it has behavior you're concerned about)
-    mock_groqllm.return_value = MagicMock()
+    return "".join(final_answer)
 
-    # Create CRAG with mocked GroqLLM
-    crag = mock_crag_class(mock_groqllm(api_key="fake-key"), docdir="fake/path.pdf")
-
-    # Run the function under test
+async def test_crag_response():
     query = "Who wrote the song Loving you is a losing game?"
-    answer = crag.run(query)
+    
+    start = time.perf_counter()  # ⏱️ Start timer
 
-    # ✅ Assertions
+    answer = await run_crag_query(query)
+
+    end = time.perf_counter()  # ⏱️ End timer
+    elapsed = end - start
+
+    print("\n\n📘 Final Answer:", answer.strip())
+    print(f"⏱️ Time taken: {elapsed:.2f} seconds")
+
+    # ✅ Sanity checks
     assert isinstance(answer, str)
     assert len(answer.strip()) > 0
+
+if __name__ == "__main__":
+    import asyncio
+    asyncio.run(test_crag_response())

@@ -4,11 +4,11 @@ from typing import List, Union
 
 class BaseLLM(ABC):
     """
-    Abstract base class for LLM interaction in a RAG system.
+    Abstract base class for async LLM interaction in a RAG system.
     """
 
     @abstractmethod
-    def generate(self, query: str, contexts: List[str]) -> Union[str, dict]:
+    async def generate(self, query: str, contexts: List[str]) -> Union[str, dict]:
         """
         Given a user query and a list of contextual documents, return the LLM-generated response.
 

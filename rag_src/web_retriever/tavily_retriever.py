@@ -3,6 +3,7 @@ from llama_index.core.schema import TextNode
 from tavily import TavilyClient
 from typing import List
 import os
+import asyncio
 
 
 class TavilyWebRetriever(BaseWebRetriever):
@@ -13,10 +14,12 @@ class TavilyWebRetriever(BaseWebRetriever):
         self.client = TavilyClient(api_key=self.api_key)
         self.max_results = max_results
 
-    def retrieve(self, query: str) -> List[TextNode]:
+    async def retrieve(self, query: str) -> List[TextNode]:
         print(f"[TAVILY] Searching web for: {query}")
         try:
-            results = self.client.search(query=query, max_results=self.max_results)
+            results = await asyncio.to_thread(
+                lambda: self.client.search(query=query, max_results=self.max_results)
+                )
             nodes = []
             for res in results.get("results", []):
                 text = f"{res.get('title', '')}\n{res.get('content', '')}".strip()

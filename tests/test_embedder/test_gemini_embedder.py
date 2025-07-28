@@ -49,3 +49,4 @@ def test_error_on_missing_key(monkeypatch):
 
     with pytest.raises(ValueError, match="Missing Google API key"):
         GeminiEmbedder(api_key=None)
+

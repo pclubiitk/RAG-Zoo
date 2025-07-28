@@ -30,7 +30,7 @@ List {self.n_expansions} variations, each on a new line.
 
         return list(set(variants))[: self.n_expansions + 1]
 
-    def retrieve(self, query: str) -> List[Dict[str, Any]]:
+    async def retrieve(self, query: str) -> List[Dict[str, Any]]:
         variants = self.expand_query(query)
         all_results = []
 

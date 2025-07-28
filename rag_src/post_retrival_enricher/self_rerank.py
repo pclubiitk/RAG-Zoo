@@ -1,5 +1,6 @@
 from rag_src.post_retrival_enricher.base import PostBaseEnricher
 from typing import List
+import asyncio
 
 
 class SelfRerank(PostBaseEnricher):
@@ -12,18 +13,20 @@ class SelfRerank(PostBaseEnricher):
     def __init__(self, llm, top_k: int = 5):
         self.llm = llm
         self.top_k = top_k
-
-    def enrich(self, docs: List[str]) -> List[str]:
-        ranked_docs = []
-
-        for doc in docs:
-            prompt = f"Give a relevance score (0 to 1) for the following doc:\n\n{doc}"
-            try:
-                score = float(self.llm.generate(prompt))
-            except:
-                score = 0.5  # default score if LLM fails
-            ranked_docs.append((score, doc))
-
+        
+    async def _get_score(self, doc: str) -> float:
+        prompt = f"Give a relevance score (0 to 1) for the following doc:\n\n{doc}"
+        try:
+            if self._is_async:
+                result = await self.llm.generate(prompt)
+            else:
+                result = await asyncio.to_thread(self.llm.generate, prompt)
+            return float(result)
+        except:
+            return 0.5,doc
+        
+    async def enrich(self, docs: List[str]) -> List[str]:
+        ranked_docs = await asyncio.gather(*[self._get_score(doc) for doc in docs])
         # sort by score in descending order
         ranked_docs.sort(reverse=True, key=lambda x: x[0])
 

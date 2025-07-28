@@ -5,6 +5,7 @@ from .duckduckgo_retriever import DuckDuckGoWebRetriever
 
 from llama_index.core.schema import TextNode
 from typing import List, Optional, Set
+import asyncio
 
 
 class HybridWebRetriever(BaseWebRetriever):
@@ -29,7 +30,7 @@ class HybridWebRetriever(BaseWebRetriever):
                 seen.add(url)
         return unique_nodes
 
-    def retrieve(self, query: str) -> List[TextNode]:
+    async def retrieve(self, query: str) -> List[TextNode]:
         print(f"[HYBRID] Attempting web search for: {query}")
 
         for name, retriever in [
@@ -38,7 +39,7 @@ class HybridWebRetriever(BaseWebRetriever):
             ("DuckDuckGo", self.duckduckgo),
         ]:
             try:
-                results = retriever.retrieve(query)
+                results = await retriever.retrieve(query)
                 results = self._deduplicate(results)
 
                 if results:

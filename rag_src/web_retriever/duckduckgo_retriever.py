@@ -2,18 +2,19 @@ from .base import BaseWebRetriever
 from llama_index.core.schema import TextNode
 from duckduckgo_search import DDGS
 from typing import List
+import asyncio
 
 
 class DuckDuckGoWebRetriever(BaseWebRetriever):
     def __init__(self, max_results: int = 5):
         self.max_results = max_results
 
-    def retrieve(self, query: str) -> List[TextNode]:
+    async def retrieve(self, query: str) -> List[TextNode]:
         print(f"[DUCKDUCKGO] Searching web for: {query}")
         nodes = []
         try:
             with DDGS() as ddgs:
-                results = ddgs.text(query, max_results=self.max_results)
+                results = await asyncio.to_thread(ddgs.text(query, max_results=self.max_results))
 
                 for res in results:
                     title = res.get("title", "")

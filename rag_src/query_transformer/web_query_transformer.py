@@ -19,5 +19,5 @@ class LLMWebQueryTransformer(BaseQueryTransformer):
             "Web Search Query:"
         )
 
-        transformed = self.llm.generate(prompt, contexts=[]).strip()
-        return [transformed]
+        transformed = self.llm.generate(prompt, contexts=[])
+        return [transformed.strip()]
