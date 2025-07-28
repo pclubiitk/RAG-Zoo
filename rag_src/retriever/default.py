@@ -34,9 +34,7 @@ class DefaultRetriever(BaseRetriever):
             self.metadata = data["metadata"]
 
     async def retrieve(self, query: str) -> List[Dict[str, Any]]:
-        # Encode the query
         query_vec = self.model.encode([query]).astype("float32")
-
         # Search the FAISS index
         distances, indices = self.index.search(query_vec, self.top_k)
 
@@ -47,5 +45,4 @@ class DefaultRetriever(BaseRetriever):
                     "text": self.documents[i],
                     "metadata": self.metadata[i]
                 })
-
         return results

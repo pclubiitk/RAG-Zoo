@@ -24,9 +24,7 @@ class MultiQuery(BaseQueryTransformer):
         Provide these alternative questions separated by newlines.
         Original question: {question}""",
         )
-        
-        llm_chain = QUERY_PROMPT | self.llm | output_parser
-        
-        queries = llm_chain.invoke({"question": query, "num_queries": n}).replace("\n\n", "\n").split("\n")
-        
+        formatted_prompt=QUERY_PROMPT.format(question=query, num_queries=n)
+        queries=self.llm.complete(formatted_prompt).text
+        queries=queries.replace("\n\n","\n").split("\n")
         return queries

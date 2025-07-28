@@ -3,6 +3,7 @@ from llama_index.core.schema import TextNode
 from serpapi import GoogleSearch
 from typing import List
 import os
+import asyncio
 
 class SerpAPIWebRetriever(BaseWebRetriever):
     def __init__(self, api_key: str = None, max_results: int = 5):
@@ -11,7 +12,7 @@ class SerpAPIWebRetriever(BaseWebRetriever):
             raise ValueError("SERPAPI_API_KEY must be provided or set in environment.")
         self.max_results = max_results
 
-    def retrieve(self, query: str) -> List[TextNode]:
+    async def retrieve(self, query: str) -> List[TextNode]:
         print(f"[SERPAPI] Searching web for: {query}")
         try:
             params = {
@@ -22,7 +23,7 @@ class SerpAPIWebRetriever(BaseWebRetriever):
             }
 
             search = GoogleSearch(params)
-            results = search.get_dict()
+            results = await asyncio.to_thread(search.get_dict())
 
             web_nodes = []
 

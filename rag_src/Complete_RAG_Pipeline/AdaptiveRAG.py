@@ -130,7 +130,7 @@ class AdaptiveRAG:
     async def analytical_retrieve(self, query, k=4):
         print("retrieving analytical")
         self.query_transform=QueryDecomposer(llm=self.llm.llm)
-        sub_questions: list[str] = await asyncio.to_thread(self.query_transform.transform(query=query))
+        sub_questions: list[str] = self.query_transform.transform(query=query)
         all_docs = []
         retrieve_tasks = [asyncio.create_task(self.retriever.retrieve(sq)) for sq in sub_questions]
         results = await asyncio.gather(*retrieve_tasks)
@@ -232,10 +232,11 @@ class AdaptiveRAG:
         )
         
         enriched_docs = await task
-        FinalPrompt = prompt_template.format(question=query,context="\n".join(enriched_docs))
+        FinalPrompt = prompt_template.format(question=query,context="\n".join(enriched_docs[:len(enriched_docs)//3]))
+        print(len(FinalPrompt), len("\n".join(enriched_docs)))
         if hasattr(self.llm,"generate_stream"):
             async for token in self.llm.generate_stream(FinalPrompt, contexts=[]):
                 yield token
-                yield "\n"
+            yield "\n"
         else:
             yield self.llm.generate(FinalPrompt, contexts=[])

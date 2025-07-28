@@ -9,7 +9,7 @@ class BaseWebRetriever(ABC):
     """
 
     @abstractmethod
-    def retrieve(self, query: str) -> List[TextNode]:
+    async def retrieve(self, query: str) -> List[TextNode]:
         """
         Perform a web search and return a list of LlamaIndex TextNodes.
         Each node can include metadata such as source_url.
