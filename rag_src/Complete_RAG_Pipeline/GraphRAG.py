@@ -53,7 +53,8 @@ class GraphRAG:
             )
             self.load_and_ingest_documents()
         else:
-            print(f"[INFO] Found existing index at {index_file}. Skipping ingestion.")
+            print(
+                f"[INFO] Found existing index at {index_file}. Skipping ingestion.")
 
         self.retriever = retriever or DefaultRetriever(index_path=index_path)
         self.kg_index = None
@@ -106,7 +107,7 @@ class GraphRAG:
             graph_store=self.graph_store,
             max_triplets_per_chunk=10,
             include_embeddings=False,
-            llm=self.llm,  # ✅ explicitly passed, so no Settings.llm needed
+            llm=self.llm,
             embed_model=self.embedder,
         )
 
