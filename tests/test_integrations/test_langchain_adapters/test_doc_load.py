@@ -1,7 +1,4 @@
-# tests/test_langchain_doc_loader_adapter.py
-
 from langchain_core.documents import Document
-
 from rag_src.doc_loader import DefaultDocLoader
 from rag_src.integrations.langchain_adapters.doc_load import LangChainLoader
 
